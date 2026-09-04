@@ -1,0 +1,2703 @@
+/* DEMIAND — founder review visual system.
+   One authoritative layer that restores a consistent editorial rhythm,
+   readable type and content-driven responsive layouts. */
+
+:root {
+  --fr-ink: #101116;
+  --fr-copy: #62656e;
+  --fr-bg: #f5f6f7;
+  --fr-panel: #ffffff;
+  --fr-line: #d5d8de;
+  --fr-red: #ef001b;
+  --fr-red-soft: #fff0f2;
+  --fr-dark: #111217;
+  --fr-radius: 24px;
+  --fr-x: max(5vw, 56px);
+  --fr-y: clamp(82px, 7.2vw, 108px);
+  --fr-shadow: 0 20px 50px rgba(17, 18, 23, .07);
+}
+
+.v2-site,
+.v2-site main {
+  overflow-x: clip !important;
+  background: var(--fr-bg) !important;
+}
+
+.v2-site .scroll-progress {
+  display: none !important;
+}
+
+.v2-site .v2-section:not(.v2-hero),
+.v2-site .numbers,
+.v2-site footer.contact {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: clip !important;
+  isolation: isolate !important;
+  padding: var(--fr-y) var(--fr-x) !important;
+  align-content: start !important;
+}
+
+.v2-site .section-pad,
+.v2-site .numbers,
+.v2-site footer.contact {
+  row-gap: 0 !important;
+}
+
+.v2-site h1,
+.v2-site h2,
+.v2-site h3,
+.v2-site strong,
+.v2-site em {
+  overflow: visible !important;
+  text-wrap: balance;
+}
+
+.v2-site h1,
+.v2-site h2 {
+  padding: 0 0 .09em !important;
+  margin-bottom: -.09em !important;
+  line-height: .93 !important;
+}
+
+.v2-site p,
+.v2-site span,
+.v2-site dd,
+.v2-site dt {
+  text-wrap: pretty;
+}
+
+.v2-site .split-heading,
+.v2-site .portfolio-head,
+.v2-site .innovation-head,
+.v2-site .support-head,
+.v2-site .numbers-heading {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.55fr) minmax(270px, .78fr) !important;
+  gap: clamp(40px, 8vw, 140px) !important;
+  align-items: start !important;
+  margin: 24px 0 38px !important;
+}
+
+.v2-site .split-heading > p,
+.v2-site .portfolio-head > p,
+.v2-site .innovation-head > p,
+.v2-site .support-head > p,
+.v2-site .numbers-heading > p {
+  align-self: start !important;
+  margin: 6px 0 0 !important;
+  max-width: 430px !important;
+  font-size: clamp(15px, 1.2vw, 18px) !important;
+  line-height: 1.45 !important;
+  color: var(--fr-copy) !important;
+}
+
+.v2-site .split-heading h2,
+.v2-site .portfolio-head h2,
+.v2-site .innovation-head h2,
+.v2-site .support-head h2,
+.v2-site .numbers-heading h2 {
+  margin: 0 !important;
+  font-size: clamp(52px, 5.1vw, 82px) !important;
+  line-height: .91 !important;
+  letter-spacing: -.065em !important;
+  clip-path: none !important;
+}
+
+.v2-site .section-label,
+.v2-site .eyebrow {
+  min-height: 0 !important;
+  line-height: 1.35 !important;
+  overflow: visible !important;
+  font-size: 11px !important;
+}
+
+.v2-site .reveal.visible {
+  clip-path: none !important;
+}
+
+/* Header and compact More menu */
+.v2-site .nav {
+  top: 16px !important;
+  left: var(--fr-x) !important;
+  right: var(--fr-x) !important;
+  width: auto !important;
+  min-height: 68px !important;
+  padding: 8px 10px 8px 22px !important;
+}
+
+.v2-site .nav .logo,
+.v2-site .nav .logo img {
+  display: block !important;
+  width: 146px !important;
+  height: auto !important;
+  object-fit: contain !important;
+  object-position: left center !important;
+  flex: 0 0 auto !important;
+  transform: none !important;
+  clip-path: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+.v2-site .section-menu {
+  top: calc(100% + 10px) !important;
+  right: 0 !important;
+  left: auto !important;
+  width: min(620px, calc(100vw - 32px)) !important;
+  padding: 18px !important;
+  border-radius: 20px !important;
+}
+
+.v2-site .section-menu-head {
+  margin-bottom: 12px !important;
+  padding: 0 2px 12px !important;
+}
+
+.v2-site .section-menu-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+}
+
+.v2-site .section-menu-grid a {
+  min-height: 58px !important;
+  display: grid !important;
+  grid-template-columns: 28px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 11px 13px !important;
+  border-radius: 13px !important;
+}
+
+.v2-site .section-menu-grid b {
+  font-size: 10px !important;
+}
+
+.v2-site .section-menu-grid span {
+  font-size: 13px !important;
+  line-height: 1.25 !important;
+}
+
+/* 01 — restore the framed interactive product scene. */
+.v2-site .v2-hero {
+  min-height: 100svh !important;
+  height: auto !important;
+  padding: 132px var(--fr-x) 54px !important;
+  grid-template-columns: minmax(0, .92fr) minmax(520px, 1.08fr) !important;
+  gap: clamp(28px, 5vw, 90px) !important;
+  align-items: center !important;
+}
+
+.v2-site .hero h1 {
+  font-size: clamp(58px, 5.25vw, 86px) !important;
+  line-height: .91 !important;
+}
+
+.v2-site .hero-object {
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  height: min(72vh, 700px) !important;
+  max-width: 790px !important;
+  max-height: 700px !important;
+  margin: 0 auto !important;
+  overflow: visible !important;
+}
+
+.v2-site .model-stage {
+  position: absolute !important;
+  inset: 1% 0 5% !important;
+  width: 100% !important;
+  height: 94% !important;
+  overflow: hidden !important;
+  filter: drop-shadow(0 18px 22px rgba(16, 17, 22, .09)) !important;
+  border-radius: 42% 42% 24% 24% !important;
+}
+
+.v2-site .model-stage::before {
+  left: 21% !important;
+  right: 21% !important;
+  bottom: 8% !important;
+  height: 7% !important;
+  background: rgba(12, 13, 17, .18) !important;
+  filter: blur(18px) !important;
+}
+
+.v2-site .hero-model {
+  width: 100% !important;
+  height: 100% !important;
+  transform: scale(.9) !important;
+  transform-origin: center !important;
+  filter: none !important;
+}
+
+.v2-site .object-note,
+.v2-site .model-hint {
+  display: flex !important;
+  position: absolute !important;
+  z-index: 4 !important;
+  align-items: center !important;
+  width: auto !important;
+  min-height: 42px !important;
+  padding: 10px 13px !important;
+  color: #5e6169 !important;
+  background: rgba(255, 255, 255, .84) !important;
+  border: 1px solid rgba(16, 17, 22, .12) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 12px 30px rgba(16, 17, 22, .08) !important;
+  backdrop-filter: blur(14px) !important;
+  font-size: 9px !important;
+  line-height: 1.35 !important;
+}
+
+.v2-site .hero-object .note-top {
+  top: 8% !important;
+  right: 0 !important;
+}
+
+.v2-site .hero-object .note-bottom {
+  bottom: 8% !important;
+  left: 0 !important;
+}
+
+.v2-site .model-hint {
+  right: 0 !important;
+  bottom: 8% !important;
+  gap: 8px !important;
+}
+
+.v2-site .model-hint i {
+  width: 24px !important;
+  height: 24px !important;
+  flex: 0 0 24px !important;
+  border-color: rgba(16, 17, 22, .16) !important;
+}
+
+/* 02 and 03 — preserve the approved cards, fix glyph clipping. */
+.v2-site .portfolio-head h2,
+.v2-site .brand-ready .split-heading h2 {
+  padding-bottom: .14em !important;
+  margin-bottom: -.14em !important;
+}
+
+.v2-site .products,
+.v2-site .v2-card-grid {
+  overflow: visible !important;
+}
+
+.v2-site .products {
+  gap: 14px !important;
+}
+
+.v2-site .product-card {
+  min-height: 480px !important;
+}
+
+.v2-site .brand-ready .v2-card-grid {
+  gap: 12px !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+.v2-site .brand-ready .v2-card {
+  min-height: 230px !important;
+  border: 1px solid var(--fr-line) !important;
+  border-radius: 22px !important;
+}
+
+/* 04 — an editorial advantage list, intentionally unlike 03. */
+.v2-site .distributor-value::before {
+  z-index: 0 !important;
+  opacity: .52 !important;
+  pointer-events: none !important;
+}
+
+.v2-site .distributor-value > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.v2-site .distributor-value .benefit-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 0 clamp(42px, 6vw, 96px) !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.v2-site .distributor-value .benefit {
+  position: relative !important;
+  min-height: 164px !important;
+  padding: 28px 12px 26px 68px !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--fr-line) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.v2-site .distributor-value .benefit::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 31px !important;
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 50% !important;
+  background: var(--fr-red-soft) !important;
+  border: 1px solid rgba(239, 0, 27, .2) !important;
+  transform: none !important;
+  clip-path: none !important;
+}
+
+.v2-site .distributor-value .benefit > b {
+  position: absolute !important;
+  left: 13px !important;
+  top: 47px !important;
+  z-index: 2 !important;
+  color: var(--fr-red) !important;
+  font-size: 10px !important;
+  line-height: 1 !important;
+}
+
+.v2-site .distributor-value .benefit h3 {
+  margin: 0 0 9px !important;
+  font-size: clamp(19px, 1.55vw, 25px) !important;
+  line-height: 1.12 !important;
+}
+
+.v2-site .distributor-value .benefit p {
+  max-width: 520px !important;
+  font-size: 14px !important;
+  line-height: 1.45 !important;
+  overflow: visible !important;
+}
+
+/* 05 — measured proof, with clear number-to-label spacing. */
+.v2-site .numbers {
+  background: #f7f7f8 !important;
+  color: var(--fr-ink) !important;
+}
+
+.v2-site .demand-stage {
+  height: auto !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: minmax(360px, .83fr) minmax(0, 1.17fr) !important;
+  gap: 14px !important;
+  margin-top: 34px !important;
+}
+
+.v2-site .demand-lead {
+  min-height: 310px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  padding: 36px 42px !important;
+  border-radius: var(--fr-radius) !important;
+}
+
+.v2-site .demand-lead small {
+  margin-bottom: 22px !important;
+}
+
+.v2-site .demand-lead strong {
+  margin: 0 !important;
+  font-size: clamp(76px, 8vw, 118px) !important;
+  line-height: .76 !important;
+}
+
+.v2-site .demand-lead > span {
+  margin-top: 18px !important;
+  font-size: 15px !important;
+  line-height: 1.15 !important;
+}
+
+.v2-site .demand-lead p {
+  margin-top: 22px !important;
+  font-size: 13px !important;
+}
+
+.v2-site .demand-proof {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  grid-template-rows: repeat(3, minmax(92px, 1fr)) !important;
+  gap: 10px !important;
+}
+
+.v2-site .demand-proof article,
+.v2-site .demand-proof article:first-child {
+  min-height: 92px !important;
+  display: grid !important;
+  grid-template-columns: minmax(150px, .75fr) minmax(135px, .48fr) minmax(160px, .77fr) !important;
+  grid-template-rows: 1fr !important;
+  align-items: center !important;
+  gap: 20px !important;
+  padding: 18px 24px !important;
+  border-radius: 20px !important;
+}
+
+.v2-site .demand-proof small,
+.v2-site .demand-proof strong,
+.v2-site .demand-proof span {
+  align-self: center !important;
+  grid-column: auto !important;
+}
+
+.v2-site .demand-proof strong {
+  font-size: clamp(42px, 4vw, 64px) !important;
+  line-height: .9 !important;
+}
+
+.v2-site .demand-proof strong sup,
+.v2-site .demand-lead strong sup {
+  display: inline-block !important;
+  margin-left: 3px !important;
+  font-size: .34em !important;
+  line-height: 1 !important;
+  vertical-align: top !important;
+  transform: translateY(-.05em) !important;
+}
+
+.v2-site .demand-proof .rating strong sup {
+  margin-left: 9px !important;
+  padding: 4px 6px !important;
+  color: var(--fr-dark) !important;
+  background: #fff !important;
+  border-radius: 999px !important;
+  font-size: .22em !important;
+  letter-spacing: 0 !important;
+  transform: translateY(-.04em) !important;
+}
+
+.v2-site .demand-proof span {
+  max-width: 180px !important;
+  font-size: 11px !important;
+}
+
+/* 06 — readable value chain with a full-width commercial action. */
+.v2-site .margins::before {
+  z-index: 0 !important;
+  opacity: .42 !important;
+  pointer-events: none !important;
+}
+
+.v2-site .margins > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.v2-site .commercial-body {
+  display: block !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin-top: 34px !important;
+}
+
+.v2-site .value-chain {
+  height: auto !important;
+  display: grid !important;
+  grid-template-columns: 1fr 38px 1fr 38px 1fr !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+}
+
+.v2-site .value-chain > div {
+  min-height: 190px !important;
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  padding: 28px 30px !important;
+  border: 1px solid var(--fr-line) !important;
+  border-radius: 22px !important;
+  background: #fff !important;
+}
+
+.v2-site .value-chain > div.active {
+  background: var(--fr-dark) !important;
+  border-color: var(--fr-dark) !important;
+}
+
+.v2-site .value-chain > b {
+  align-self: center !important;
+  text-align: center !important;
+  color: var(--fr-red) !important;
+  font-size: 24px !important;
+}
+
+.v2-site .value-chain small {
+  width: 30px !important;
+  height: 30px !important;
+  display: grid !important;
+  place-items: center !important;
+  margin: 0 0 22px !important;
+  color: var(--fr-red) !important;
+  background: var(--fr-red-soft) !important;
+  border-radius: 50% !important;
+  font-size: 10px !important;
+}
+
+.v2-site .value-chain > div.active small {
+  color: #fff !important;
+  background: var(--fr-red) !important;
+}
+
+.v2-site .value-chain > div.active strong,
+.v2-site .value-chain > div.active span {
+  color: #fff !important;
+}
+
+.v2-site .value-chain strong {
+  margin: 0 0 8px !important;
+  font-size: clamp(25px, 2.2vw, 36px) !important;
+}
+
+.v2-site .value-chain span {
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+
+.v2-site .commercial-aside {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+  margin-top: 12px !important;
+}
+
+.v2-site .commercial-tags {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+}
+
+.v2-site .commercial-tags span {
+  min-height: 64px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 16px 20px !important;
+  font-size: 13px !important;
+}
+
+.v2-site .commercial-aside .button {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  min-height: 66px !important;
+  justify-content: space-between !important;
+  padding-inline: 24px !important;
+  font-size: 14px !important;
+}
+
+/* 07 — aligned heading and balanced image/feature field. */
+.v2-site .innovation-grid {
+  height: auto !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: 1.1fr .9fr !important;
+  gap: 14px !important;
+  margin-top: 34px !important;
+}
+
+.v2-site .innovation-visual {
+  min-height: 430px !important;
+}
+
+.v2-site .innovation-points {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  grid-template-rows: 1fr 1fr !important;
+  gap: 10px !important;
+}
+
+.v2-site .innovation .point {
+  min-height: 0 !important;
+  padding: 22px !important;
+}
+
+.v2-site .innovation .point h3 {
+  margin: auto 0 9px !important;
+  font-size: clamp(17px, 1.35vw, 22px) !important;
+}
+
+.v2-site .innovation .point p {
+  font-size: 14px !important;
+}
+
+/* 08 — a single, high-impact connected ecosystem stage. */
+.v2-site .app-ecosystem {
+  background: #f0f1f3 !important;
+}
+
+.v2-site .app-stage {
+  position: relative !important;
+  height: auto !important;
+  min-height: 520px !important;
+  display: grid !important;
+  grid-template-columns: minmax(420px, .9fr) minmax(0, 1.1fr) !important;
+  gap: 0 !important;
+  margin-top: 36px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  color: #fff !important;
+  background:
+    radial-gradient(circle at 24% 74%, rgba(239, 0, 27, .3), transparent 33%),
+    linear-gradient(135deg, #191a20 0%, #0e0f13 72%) !important;
+  border: 1px solid rgba(16, 17, 22, .1) !important;
+  border-radius: 30px !important;
+  box-shadow: 0 28px 70px rgba(16, 17, 22, .15) !important;
+}
+
+.v2-site .app-stage::before,
+.v2-site .app-stage::after {
+  display: none !important;
+}
+
+.v2-site .app-device-panel {
+  position: relative !important;
+  min-height: 520px !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-right: 1px solid rgba(255, 255, 255, .1) !important;
+}
+
+.v2-site .app-device-label {
+  position: absolute !important;
+  z-index: 3 !important;
+  left: 30px !important;
+  top: 28px !important;
+  color: rgba(255, 255, 255, .72) !important;
+  font-size: 10px !important;
+}
+
+.v2-site .app-device-panel > img,
+.v2-site .app-stage > img {
+  position: absolute !important;
+  inset: 58px 6% 12px !important;
+  width: 88% !important;
+  height: calc(100% - 70px) !important;
+  max-width: none !important;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+  transform: none !important;
+  filter: drop-shadow(0 24px 26px rgba(0, 0, 0, .28)) !important;
+  animation: none !important;
+}
+
+.v2-site .app-device-stat {
+  position: absolute !important;
+  z-index: 4 !important;
+  right: 26px !important;
+  bottom: 24px !important;
+  width: 182px !important;
+  min-height: 104px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  padding: 18px 20px !important;
+  background: #fff !important;
+  border: 1px solid rgba(255, 255, 255, .28) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, .18) !important;
+}
+
+.v2-site .app-device-stat strong {
+  color: var(--fr-red) !important;
+  font-size: 40px !important;
+  line-height: .9 !important;
+}
+
+.v2-site .app-device-stat span {
+  margin-top: 10px !important;
+  color: var(--fr-copy) !important;
+  font-size: 12px !important;
+}
+
+.v2-site .app-feature-panel {
+  min-width: 0 !important;
+  display: grid !important;
+  grid-template-rows: auto 1fr auto !important;
+  align-content: center !important;
+  gap: 26px !important;
+  padding: 42px !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+.v2-site .app-panel-head {
+  display: grid !important;
+  grid-template-columns: 1fr auto !important;
+  align-items: start !important;
+  gap: 24px !important;
+}
+
+.v2-site .app-panel-head small {
+  color: #ff4b5f !important;
+  font-size: 10px !important;
+}
+
+.v2-site .app-panel-head strong {
+  color: #fff !important;
+  font-size: clamp(34px, 3.15vw, 52px) !important;
+  line-height: .92 !important;
+  letter-spacing: -.045em !important;
+  text-align: right !important;
+}
+
+.v2-site .app-feature-panel .app-flow {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  grid-template-rows: 1fr 1fr !important;
+  gap: 10px !important;
+}
+
+.v2-site .app-feature-panel .app-flow article {
+  position: relative !important;
+  min-height: 128px !important;
+  display: grid !important;
+  grid-template-columns: 34px minmax(0, 1fr) !important;
+  grid-template-rows: auto auto !important;
+  align-content: center !important;
+  gap: 6px 12px !important;
+  padding: 22px !important;
+  background: rgba(255, 255, 255, .07) !important;
+  border: 1px solid rgba(255, 255, 255, .11) !important;
+  border-radius: 18px !important;
+  box-shadow: none !important;
+}
+
+.v2-site .app-feature-panel .app-flow article > i {
+  grid-column: 1 !important;
+  grid-row: 1 / 3 !important;
+  align-self: center !important;
+  color: #ff4b5f !important;
+  font-size: 11px !important;
+}
+
+.v2-site .app-feature-panel .app-flow article > strong,
+.v2-site .app-feature-panel .app-flow article > span {
+  grid-column: 2 !important;
+  width: auto !important;
+  max-width: none !important;
+}
+
+.v2-site .app-feature-panel .app-flow article > strong {
+  grid-row: 1 !important;
+  color: #fff !important;
+  font-size: 18px !important;
+  line-height: 1.15 !important;
+}
+
+.v2-site .app-feature-panel .app-flow article > span {
+  grid-row: 2 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: rgba(255, 255, 255, .62) !important;
+  background: transparent !important;
+  border: 0 !important;
+  font-size: 13px !important;
+  line-height: 1.35 !important;
+}
+
+.v2-site .app-feature-panel .app-flow article > span::before {
+  display: none !important;
+}
+
+.v2-site .app-feature-panel .legal-note {
+  margin: 0 !important;
+  color: rgba(255, 255, 255, .5) !important;
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+}
+
+/* 09 — launch assets with readable hierarchy. */
+.v2-site .launch-system {
+  height: auto !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: minmax(330px, .78fr) minmax(0, 1.22fr) !important;
+  gap: 12px !important;
+  margin-top: 34px !important;
+}
+
+.v2-site .launch-bundle {
+  min-height: 350px !important;
+  padding: 34px 38px !important;
+  border-radius: var(--fr-radius) !important;
+}
+
+.v2-site .launch-bundle strong {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  margin: 28px 0 18px !important;
+  font-size: clamp(38px, 3.7vw, 58px) !important;
+  line-height: .92 !important;
+}
+
+.v2-site .launch-bundle strong > span {
+  display: block !important;
+  color: #fff !important;
+  font-size: 1em !important;
+  line-height: .92 !important;
+}
+
+.v2-site .launch-bundle strong br {
+  display: block !important;
+}
+
+.v2-site .launch-bundle strong b {
+  font-size: clamp(74px, 7vw, 104px) !important;
+  line-height: .7 !important;
+}
+
+.v2-site .launch-bundle p {
+  max-width: 340px !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+}
+
+.v2-site .launch-assets {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  grid-template-rows: repeat(3, 1fr) !important;
+  gap: 10px !important;
+}
+
+.v2-site .launch-assets li {
+  min-height: 110px !important;
+  display: grid !important;
+  grid-template-columns: 32px minmax(0, 1fr) !important;
+  grid-template-rows: auto auto !important;
+  align-content: center !important;
+  gap: 5px 14px !important;
+  padding: 18px !important;
+  border-radius: 18px !important;
+}
+
+.v2-site .launch-assets i {
+  grid-row: 1 / 3 !important;
+  align-self: center !important;
+  width: 30px !important;
+  height: 30px !important;
+  display: grid !important;
+  place-items: center !important;
+  color: var(--fr-red) !important;
+  background: var(--fr-red-soft) !important;
+  border-radius: 50% !important;
+  font-size: 10px !important;
+}
+
+.v2-site .launch-assets strong {
+  font-size: 17px !important;
+  line-height: 1.15 !important;
+}
+
+.v2-site .launch-assets span {
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+}
+
+/* 10 — compact, purposeful regional configuration. */
+.v2-site .regional-system {
+  height: auto !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.15fr) minmax(330px, .85fr) !important;
+  gap: 12px !important;
+  margin-top: 34px !important;
+}
+
+.v2-site .power-config,
+.v2-site .localization-stack {
+  min-height: 330px !important;
+  padding: 28px !important;
+  border-radius: var(--fr-radius) !important;
+}
+
+.v2-site .power-config {
+  display: grid !important;
+  grid-template-rows: auto 1fr auto !important;
+  gap: 18px !important;
+  background: var(--fr-dark) !important;
+  color: #fff !important;
+}
+
+.v2-site .power-head span {
+  color: rgba(255, 255, 255, .55) !important;
+}
+
+.v2-site .power-options {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+}
+
+.v2-site .power-options article {
+  position: relative !important;
+  min-height: 168px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important;
+  padding: 52px 22px 20px !important;
+  background: rgba(255, 255, 255, .08) !important;
+  border: 1px solid rgba(255, 255, 255, .1) !important;
+  border-radius: 18px !important;
+}
+
+.v2-site .power-options i {
+  left: 20px !important;
+  top: 18px !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: grid !important;
+  place-items: center !important;
+  color: #fff !important;
+  background: var(--fr-red) !important;
+  border-radius: 50% !important;
+  font-size: 9px !important;
+}
+
+.v2-site .power-options strong {
+  color: #fff !important;
+  font-size: clamp(42px, 3.8vw, 58px) !important;
+  line-height: .88 !important;
+  letter-spacing: -.07em !important;
+  white-space: nowrap !important;
+}
+
+.v2-site .power-options span,
+.v2-site .power-config > p {
+  color: rgba(255, 255, 255, .62) !important;
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+}
+
+.v2-site .localization-stack {
+  display: grid !important;
+  grid-template-rows: auto 1fr !important;
+  gap: 18px !important;
+  background: #fff !important;
+  border: 1px solid var(--fr-line) !important;
+}
+
+.v2-site .localization-stack ul {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+  margin: 0 !important;
+}
+
+.v2-site .localization-stack li {
+  min-height: 104px !important;
+  display: grid !important;
+  grid-template-columns: 30px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 16px !important;
+  background: var(--fr-bg) !important;
+  border: 0 !important;
+  border-radius: 16px !important;
+  font-size: 14px !important;
+  line-height: 1.3 !important;
+}
+
+.v2-site .localization-stack li b {
+  color: var(--fr-red) !important;
+  font-size: 10px !important;
+}
+
+/* 11 — title above a full-width factory scene; no nested white frame. */
+.v2-site .manufacturing-layout {
+  height: auto !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.5fr) minmax(300px, .72fr) !important;
+  grid-template-rows: auto auto 470px !important;
+  gap: 34px clamp(50px, 8vw, 130px) !important;
+  background: transparent !important;
+  border: 0 !important;
+  overflow: visible !important;
+}
+
+.v2-site .manufacturing-copy {
+  display: contents !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.v2-site .manufacturing-copy .section-label {
+  grid-column: 1 / -1 !important;
+  grid-row: 1 !important;
+}
+
+.v2-site .manufacturing-copy h2 {
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+  margin: 0 !important;
+  padding-bottom: .09em !important;
+  font-size: clamp(52px, 5.1vw, 82px) !important;
+  line-height: .91 !important;
+}
+
+.v2-site .manufacturing-copy > p {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+  align-self: start !important;
+  max-width: 430px !important;
+  margin: 6px 0 0 !important;
+  font-size: clamp(15px, 1.2vw, 18px) !important;
+  line-height: 1.45 !important;
+}
+
+.v2-site .manufacturing-metrics {
+  position: relative !important;
+  z-index: 4 !important;
+  grid-column: 2 !important;
+  grid-row: 3 !important;
+  align-self: end !important;
+  width: calc(100% + 28px) !important;
+  margin: 0 0 26px -28px !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  padding: 8px !important;
+  overflow: visible !important;
+  color: var(--fr-ink) !important;
+  background: #fff !important;
+  border-radius: 18px !important;
+  box-shadow: 0 20px 46px rgba(0, 0, 0, .18) !important;
+}
+
+.v2-site .manufacturing-metrics > div {
+  min-width: 0 !important;
+  padding: 18px !important;
+  border-right: 1px solid var(--fr-line) !important;
+}
+
+.v2-site .manufacturing-metrics > div:last-child {
+  border-right: 0 !important;
+}
+
+.v2-site .manufacturing-metrics strong {
+  display: block !important;
+  white-space: nowrap !important;
+  color: var(--fr-red) !important;
+  font-size: clamp(30px, 3vw, 48px) !important;
+  line-height: .9 !important;
+}
+
+.v2-site .manufacturing-metrics span {
+  display: block !important;
+  width: auto !important;
+  margin-top: 10px !important;
+  font-size: 10px !important;
+  line-height: 1.25 !important;
+}
+
+.v2-site .factory-visual,
+.v2-site .manufacturing-layout .factory-visual {
+  grid-column: 1 / -1 !important;
+  grid-row: 3 !important;
+  width: 100% !important;
+  height: 470px !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  border-radius: 28px !important;
+  box-shadow: 0 28px 60px rgba(16, 17, 22, .13) !important;
+}
+
+.v2-site .factory-photo {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center 46% !important;
+}
+
+.v2-site .factory-visual::after {
+  background: linear-gradient(to top, rgba(10, 10, 13, .68), transparent 46%) !important;
+}
+
+.v2-site .factory-visual figcaption {
+  left: 22px !important;
+  right: 22px !important;
+  top: 20px !important;
+  bottom: auto !important;
+  z-index: 5 !important;
+  min-height: 50px !important;
+  padding: 14px 18px !important;
+  color: #fff !important;
+  background: rgba(8, 9, 12, .68) !important;
+  border: 1px solid rgba(255, 255, 255, .16) !important;
+  border-radius: 14px !important;
+  backdrop-filter: blur(12px) !important;
+  font-size: 10px !important;
+}
+
+/* 12 — clear quality journey instead of empty boxes. */
+.v2-site .quality-body {
+  height: auto !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  grid-template-rows: auto auto !important;
+  gap: 12px !important;
+  margin-top: 34px !important;
+}
+
+.v2-site .quality-path {
+  position: relative !important;
+  height: auto !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  overflow: visible !important;
+}
+
+.v2-site .quality-path::before {
+  display: block !important;
+  content: "" !important;
+  position: absolute !important;
+  z-index: 0 !important;
+  left: 8% !important;
+  right: 8% !important;
+  top: 54px !important;
+  height: 1px !important;
+  background: rgba(239, 0, 27, .3) !important;
+}
+
+.v2-site .quality-path article,
+.v2-site .quality-path article.active {
+  position: relative !important;
+  z-index: 1 !important;
+  min-height: 220px !important;
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 0 !important;
+  padding: 28px !important;
+  background: #fff !important;
+  border: 1px solid var(--fr-line) !important;
+  border-radius: 22px !important;
+}
+
+.v2-site .quality-path article.active {
+  background: var(--fr-red-soft) !important;
+  border-color: rgba(239, 0, 27, .38) !important;
+}
+
+.v2-site .quality-path article > b {
+  width: 52px !important;
+  height: 52px !important;
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 52px !important;
+  color: var(--fr-red) !important;
+  background: #fff !important;
+  border: 1px solid rgba(239, 0, 27, .35) !important;
+  border-radius: 50% !important;
+  font-size: 12px !important;
+}
+
+.v2-site .quality-path article.active > b {
+  color: #fff !important;
+  background: var(--fr-red) !important;
+  border-color: var(--fr-red) !important;
+}
+
+.v2-site .quality-path article > span {
+  display: none !important;
+}
+
+.v2-site .quality-path article > div {
+  margin-top: auto !important;
+}
+
+.v2-site .quality .quality-path article h3 {
+  margin: 0 0 9px !important;
+  font-size: clamp(17px, 1.4vw, 21px) !important;
+  line-height: 1.15 !important;
+}
+
+.v2-site .quality-path article p {
+  display: block !important;
+  margin: 0 !important;
+  color: var(--fr-copy) !important;
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
+
+.v2-site .defect-rate {
+  min-height: 86px !important;
+  display: grid !important;
+  grid-template-columns: minmax(190px, .5fr) auto minmax(260px, 1fr) !important;
+  align-items: center !important;
+  gap: 28px !important;
+  padding: 16px 24px !important;
+  color: var(--fr-ink) !important;
+  background: var(--fr-dark) !important;
+  border: 0 !important;
+  border-radius: 18px !important;
+}
+
+.v2-site .defect-rate small,
+.v2-site .defect-rate span {
+  color: rgba(255, 255, 255, .62) !important;
+  font-size: 11px !important;
+}
+
+.v2-site .defect-rate strong {
+  color: #fff !important;
+  font-size: clamp(46px, 4.5vw, 68px) !important;
+}
+
+/* 13 — roomy 2 × 2 support matrix. */
+.v2-site .after-sales .v2-card-grid {
+  height: auto !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 12px !important;
+  margin-top: 34px !important;
+  overflow: visible !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+.v2-site .after-sales .v2-card {
+  position: relative !important;
+  min-height: 206px !important;
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important;
+  padding: 28px 30px !important;
+  background: #fff !important;
+  border: 1px solid var(--fr-line) !important;
+  border-radius: 22px !important;
+  box-shadow: none !important;
+}
+
+.v2-site .after-sales .v2-card:first-child {
+  color: #fff !important;
+  background: var(--fr-red) !important;
+  border-color: var(--fr-red) !important;
+}
+
+.v2-site .after-sales .v2-card::before,
+.v2-site .after-sales .v2-card::after {
+  display: none !important;
+}
+
+.v2-site .after-sales .v2-card > span {
+  position: absolute !important;
+  left: 28px !important;
+  top: 24px !important;
+  width: 36px !important;
+  height: 36px !important;
+  display: grid !important;
+  place-items: center !important;
+  color: var(--fr-red) !important;
+  background: var(--fr-red-soft) !important;
+  border: 1px solid rgba(239, 0, 27, .16) !important;
+  border-radius: 50% !important;
+  font-size: 10px !important;
+  opacity: 1 !important;
+}
+
+.v2-site .after-sales .v2-card:first-child > span {
+  color: #fff !important;
+  background: rgba(17, 18, 23, .22) !important;
+  border-color: rgba(255, 255, 255, .32) !important;
+}
+
+.v2-site .after-sales .v2-card h3 {
+  margin: 0 0 10px !important;
+  font-size: clamp(20px, 1.7vw, 27px) !important;
+  line-height: 1.1 !important;
+}
+
+.v2-site .after-sales .v2-card p {
+  margin: 0 !important;
+  font-size: 14px !important;
+  line-height: 1.45 !important;
+}
+
+/* 14 — two honest adjacent zones, with no overlapping geometry. */
+.v2-site .world-stage {
+  position: relative !important;
+  height: auto !important;
+  min-height: 300px !important;
+  display: grid !important;
+  grid-template-columns: minmax(310px, .34fr) minmax(0, .66fr) !important;
+  grid-template-rows: 1fr !important;
+  gap: 0 !important;
+  margin-top: 34px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 26px !important;
+}
+
+.v2-site .world-stage::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  z-index: 0 !important;
+  inset: 0 auto 0 0 !important;
+  width: 34% !important;
+  height: auto !important;
+  background: var(--fr-red) !important;
+  border-radius: 26px 0 0 26px !important;
+}
+
+.v2-site .world-orbits {
+  display: none !important;
+}
+
+.v2-site .world-stage > strong {
+  position: relative !important;
+  z-index: 1 !important;
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  align-self: center !important;
+  justify-self: center !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 0 34px !important;
+  color: #fff !important;
+  background: transparent !important;
+  border: 0 !important;
+  font-size: clamp(96px, 9vw, 140px) !important;
+  line-height: .75 !important;
+}
+
+.v2-site .world-stage > span {
+  position: relative !important;
+  z-index: 2 !important;
+  inset: auto !important;
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  align-self: center !important;
+  justify-self: center !important;
+  margin-top: 100px !important;
+  padding: 0 !important;
+  color: #fff !important;
+  font-size: 10px !important;
+}
+
+.v2-site .world-stage ol {
+  position: relative !important;
+  z-index: 2 !important;
+  inset: auto !important;
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  grid-template-rows: 1fr 1fr !important;
+  gap: 10px !important;
+  margin: 0 !important;
+  padding: 14px !important;
+  background: #fff !important;
+  border: 1px solid var(--fr-line) !important;
+  border-left: 0 !important;
+  border-radius: 0 26px 26px 0 !important;
+}
+
+.v2-site .world-stage li {
+  position: relative !important;
+  min-height: 126px !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  padding: 52px 18px 18px !important;
+  background: var(--fr-bg) !important;
+  border: 0 !important;
+  border-radius: 16px !important;
+  color: var(--fr-ink) !important;
+  font-size: 14px !important;
+  line-height: 1.25 !important;
+}
+
+.v2-site .world-stage li::before {
+  left: 17px !important;
+  top: 16px !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: grid !important;
+  place-items: center !important;
+  color: var(--fr-red) !important;
+  background: var(--fr-red-soft) !important;
+  border-radius: 50% !important;
+  font-size: 9px !important;
+  transform: none !important;
+}
+
+/* 15 — protected marks with enough real width. */
+.v2-site .ip-grid {
+  height: auto !important;
+  display: grid !important;
+  grid-template-columns: 1.3fr repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  margin-top: 34px !important;
+  overflow: visible !important;
+}
+
+.v2-site .ip-grid article {
+  position: relative !important;
+  min-width: 0 !important;
+  min-height: 210px !important;
+  height: auto !important;
+  padding: 24px !important;
+  overflow: hidden !important;
+  border-radius: 22px !important;
+}
+
+.v2-site .ip-grid article::after {
+  z-index: 0 !important;
+  right: -24px !important;
+  bottom: -36px !important;
+  left: auto !important;
+  top: auto !important;
+  width: 120px !important;
+  height: 120px !important;
+  transform: rotate(45deg) !important;
+  background: transparent !important;
+  border: 1px solid rgba(239, 0, 27, .2) !important;
+}
+
+.v2-site .ip-grid article > * {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.v2-site .ip-grid article strong {
+  max-width: 100% !important;
+  margin-top: auto !important;
+  white-space: nowrap !important;
+  font-size: clamp(50px, 4.2vw, 68px) !important;
+  line-height: .9 !important;
+  letter-spacing: -.055em !important;
+}
+
+.v2-site .ip-grid article:first-child strong {
+  font-size: clamp(35px, 3.35vw, 54px) !important;
+}
+
+.v2-site .ip-grid article span {
+  font-size: 14px !important;
+}
+
+/* 16 — benefit tiles plus readable commercial terms cards. */
+.v2-site .terms-layout {
+  height: auto !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: minmax(300px, .62fr) minmax(0, 1.38fr) !important;
+  gap: 12px !important;
+  margin-top: 34px !important;
+}
+
+.v2-site .terms-list {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  grid-template-rows: 1fr 1fr !important;
+  gap: 10px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  overflow: visible !important;
+}
+
+.v2-site .terms-list span {
+  min-height: 118px !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  padding: 20px !important;
+  color: var(--fr-ink) !important;
+  background: #fff !important;
+  border: 1px solid var(--fr-line) !important;
+  border-radius: 18px !important;
+  font-size: 14px !important;
+  line-height: 1.35 !important;
+}
+
+.v2-site .terms-list span:first-child {
+  color: #fff !important;
+  background: var(--fr-red) !important;
+  border-color: var(--fr-red) !important;
+}
+
+.v2-site .terms-list span::before {
+  display: none !important;
+}
+
+.v2-site .terms-table {
+  height: auto !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  grid-template-rows: 1fr 1fr !important;
+  gap: 10px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  overflow: visible !important;
+}
+
+.v2-site .terms-table > div {
+  min-height: 118px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  padding: 18px !important;
+  background: #fff !important;
+  border: 1px solid var(--fr-line) !important;
+  border-radius: 18px !important;
+}
+
+.v2-site .terms-table dt,
+.v2-site .terms-table dd {
+  width: auto !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  font-size: 13px !important;
+  line-height: 1.35 !important;
+}
+
+.v2-site .terms-table dt {
+  color: var(--fr-ink) !important;
+  font-weight: 700 !important;
+}
+
+.v2-site .terms-table dd {
+  margin: 14px 0 0 !important;
+  color: var(--fr-copy) !important;
+}
+
+/* 17 — a decisive full-width CTA, with the brand restored. */
+.v2-site footer.contact {
+  position: relative !important;
+  padding-top: clamp(66px, 6vw, 90px) !important;
+  padding-bottom: clamp(38px, 4vw, 58px) !important;
+  color: #fff !important;
+  background:
+    radial-gradient(circle at 12% 62%, rgba(255, 255, 255, .09), transparent 27%),
+    linear-gradient(135deg, #ef001b 0%, #d70019 48%, #b90016 100%) !important;
+  overflow: hidden !important;
+}
+
+.v2-site footer.contact::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: -35% -8% auto auto !important;
+  width: 58vw !important;
+  aspect-ratio: 1 !important;
+  border: 1px solid rgba(255, 255, 255, .17) !important;
+  border-radius: 50% !important;
+  pointer-events: none !important;
+}
+
+.v2-site .contact-top {
+  position: relative !important;
+  z-index: 2 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-height: 54px !important;
+  padding: 0 0 24px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, .24) !important;
+}
+
+.v2-site .contact-top .logo,
+.v2-site .contact-top .logo img {
+  display: block !important;
+  width: 172px !important;
+  height: auto !important;
+  opacity: 1 !important;
+  filter: brightness(0) invert(1) !important;
+  transform: none !important;
+}
+
+.v2-site .contact-top .section-label {
+  margin: 0 !important;
+  color: rgba(255, 255, 255, .72) !important;
+  font-size: 10px !important;
+}
+
+.v2-site .contact-top .section-label span:first-child {
+  color: #fff !important;
+}
+
+.v2-site .contact-main {
+  position: relative !important;
+  z-index: 2 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, .88fr) minmax(520px, 1.12fr) !important;
+  gap: clamp(42px, 7vw, 110px) !important;
+  align-items: center !important;
+  margin: clamp(44px, 5vw, 74px) 0 !important;
+}
+
+.v2-site .contact-intro {
+  height: auto !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  color: #fff !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.v2-site .contact-kicker {
+  margin: 0 0 26px !important;
+  color: rgba(255, 255, 255, .7) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: .16em !important;
+}
+
+.v2-site .contact-intro h2 {
+  margin: 0 0 28px !important;
+  color: #fff !important;
+  font-size: clamp(58px, 5.8vw, 92px) !important;
+  line-height: .9 !important;
+}
+
+.v2-site .contact-intro h2 em {
+  color: var(--fr-dark) !important;
+}
+
+.v2-site .contact-intro > p:not(.contact-kicker) {
+  max-width: 600px !important;
+  margin: 0 !important;
+  color: rgba(255, 255, 255, .82) !important;
+  font-size: 15px !important;
+  line-height: 1.5 !important;
+}
+
+.v2-site .contact-channels {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 8px !important;
+  margin-top: 30px !important;
+}
+
+.v2-site .contact-channels button {
+  min-height: 58px !important;
+  display: grid !important;
+  grid-template-columns: 92px minmax(0, 1fr) 24px !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 12px 16px !important;
+  color: #fff !important;
+  background: rgba(17, 18, 23, .16) !important;
+  border: 1px solid rgba(255, 255, 255, .26) !important;
+  border-radius: 14px !important;
+}
+
+.v2-site .contact-channels small {
+  color: rgba(255, 255, 255, .68) !important;
+  font-size: 9px !important;
+}
+
+.v2-site .contact-channels span {
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  color: #fff !important;
+  font-size: 13px !important;
+}
+
+.v2-site .partner-form {
+  height: auto !important;
+  min-height: 510px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  padding: clamp(30px, 3.6vw, 52px) !important;
+  color: var(--fr-ink) !important;
+  background: #fff !important;
+  border: 0 !important;
+  border-radius: 28px !important;
+  box-shadow: 0 28px 70px rgba(64, 0, 8, .2) !important;
+}
+
+.v2-site .form-grid {
+  margin-top: 28px !important;
+}
+
+.v2-site .partner-form label > span {
+  font-size: 11px !important;
+}
+
+.v2-site .partner-form input,
+.v2-site .partner-form select {
+  min-height: 58px !important;
+  font-size: 14px !important;
+}
+
+.v2-site .form-submit {
+  margin-top: 30px !important;
+}
+
+.v2-site .form-submit .button {
+  min-height: 58px !important;
+}
+
+.v2-site .contact-bottom {
+  position: relative !important;
+  z-index: 2 !important;
+  margin: 0 !important;
+  padding-top: 20px !important;
+  color: rgba(255, 255, 255, .65) !important;
+  border-color: rgba(255, 255, 255, .24) !important;
+}
+
+.v2-site .contact-bottom a {
+  color: #fff !important;
+}
+
+@media (max-width: 1180px) {
+  :root {
+    --fr-x: 36px;
+    --fr-y: 78px;
+  }
+
+  .v2-site .nav {
+    left: 24px !important;
+    right: 24px !important;
+  }
+
+  .v2-site .split-heading,
+  .v2-site .portfolio-head,
+  .v2-site .innovation-head,
+  .v2-site .support-head,
+  .v2-site .numbers-heading {
+    grid-template-columns: minmax(0, 1.35fr) minmax(250px, .65fr) !important;
+    gap: 38px !important;
+  }
+
+  .v2-site .v2-hero {
+    grid-template-columns: minmax(0, .9fr) minmax(440px, 1.1fr) !important;
+    gap: 24px !important;
+  }
+
+  .v2-site .hero h1 {
+    font-size: clamp(52px, 5.4vw, 70px) !important;
+  }
+
+  .v2-site .app-stage {
+    grid-template-columns: minmax(350px, .85fr) minmax(0, 1.15fr) !important;
+  }
+
+  .v2-site .app-feature-panel {
+    padding: 30px !important;
+  }
+
+  .v2-site .app-panel-head strong {
+    font-size: 36px !important;
+  }
+
+  .v2-site .app-feature-panel .app-flow article {
+    padding: 18px !important;
+  }
+
+  .v2-site .launch-system {
+    grid-template-columns: minmax(290px, .72fr) minmax(0, 1.28fr) !important;
+  }
+
+  .v2-site .launch-bundle {
+    padding: 30px !important;
+  }
+
+  .v2-site .regional-system {
+    grid-template-columns: minmax(0, 1.1fr) minmax(300px, .9fr) !important;
+  }
+
+  .v2-site .power-options strong {
+    font-size: 46px !important;
+  }
+
+  .v2-site .manufacturing-layout {
+    gap: 28px 48px !important;
+  }
+
+  .v2-site .manufacturing-metrics {
+    grid-column: 1 / -1 !important;
+    width: calc(100% - 44px) !important;
+    margin: 0 22px 22px !important;
+  }
+
+  .v2-site .world-stage {
+    grid-template-columns: minmax(270px, .31fr) minmax(0, .69fr) !important;
+  }
+
+  .v2-site .world-stage::before {
+    width: 31% !important;
+  }
+
+  .v2-site .world-stage li {
+    padding: 50px 14px 16px !important;
+    font-size: 13px !important;
+  }
+
+  .v2-site .terms-layout {
+    grid-template-columns: minmax(280px, .55fr) minmax(0, 1.45fr) !important;
+  }
+
+  .v2-site .terms-table dt,
+  .v2-site .terms-table dd {
+    font-size: 12px !important;
+  }
+
+  .v2-site .contact-main {
+    grid-template-columns: minmax(0, .82fr) minmax(480px, 1.18fr) !important;
+    gap: 42px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  :root {
+    --fr-x: 28px;
+    --fr-y: 72px;
+  }
+
+  .v2-site .v2-hero {
+    min-height: 0 !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto 430px !important;
+    padding-top: 112px !important;
+    gap: 28px !important;
+  }
+
+  .v2-site .hero-copy {
+    max-width: 680px !important;
+    padding: 0 !important;
+  }
+
+  .v2-site .hero-object {
+    height: 430px !important;
+    max-width: 650px !important;
+  }
+
+  .v2-site .hero-footer {
+    display: none !important;
+  }
+
+  .v2-site .split-heading,
+  .v2-site .portfolio-head,
+  .v2-site .innovation-head,
+  .v2-site .support-head,
+  .v2-site .numbers-heading {
+    grid-template-columns: minmax(0, 1.15fr) minmax(240px, .85fr) !important;
+    gap: 28px !important;
+  }
+
+  .v2-site .split-heading h2,
+  .v2-site .portfolio-head h2,
+  .v2-site .innovation-head h2,
+  .v2-site .support-head h2,
+  .v2-site .numbers-heading h2,
+  .v2-site .manufacturing-copy h2 {
+    font-size: clamp(46px, 7vw, 64px) !important;
+  }
+
+  .v2-site .product-card {
+    min-height: 460px !important;
+  }
+
+  .v2-site .distributor-value .benefit-grid {
+    gap: 0 32px !important;
+  }
+
+  .v2-site .demand-stage {
+    grid-template-columns: 1fr !important;
+  }
+
+  .v2-site .demand-lead {
+    min-height: 270px !important;
+  }
+
+  .v2-site .value-chain {
+    grid-template-columns: 1fr !important;
+  }
+
+  .v2-site .value-chain > b {
+    height: 32px !important;
+    display: grid !important;
+    place-items: center !important;
+    transform: rotate(90deg) !important;
+  }
+
+  .v2-site .value-chain > div {
+    min-height: 140px !important;
+  }
+
+  .v2-site .innovation-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .v2-site .innovation-visual {
+    min-height: 390px !important;
+  }
+
+  .v2-site .app-stage {
+    grid-template-columns: 1fr !important;
+    min-height: 0 !important;
+  }
+
+  .v2-site .app-device-panel {
+    min-height: 410px !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, .1) !important;
+  }
+
+  .v2-site .app-feature-panel {
+    padding: 34px !important;
+  }
+
+  .v2-site .launch-system,
+  .v2-site .regional-system {
+    grid-template-columns: 1fr !important;
+  }
+
+  .v2-site .launch-bundle {
+    min-height: 300px !important;
+  }
+
+  .v2-site .quality-path {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .v2-site .quality-path::before {
+    display: none !important;
+  }
+
+  .v2-site .world-stage {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: 180px auto !important;
+  }
+
+  .v2-site .world-stage::before {
+    width: 100% !important;
+    height: 180px !important;
+    border-radius: 24px 24px 0 0 !important;
+  }
+
+  .v2-site .world-stage > strong,
+  .v2-site .world-stage > span {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+  }
+
+  .v2-site .world-stage > strong {
+    justify-self: start !important;
+    padding: 0 0 0 28px !important;
+    font-size: 96px !important;
+  }
+
+  .v2-site .world-stage > span {
+    justify-self: end !important;
+    margin: 0 !important;
+    padding-right: 28px !important;
+  }
+
+  .v2-site .world-stage ol {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    border-top: 0 !important;
+    border-left: 1px solid var(--fr-line) !important;
+    border-radius: 0 0 24px 24px !important;
+  }
+
+  .v2-site .ip-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .v2-site .ip-grid article:first-child {
+    grid-column: 1 / -1 !important;
+  }
+
+  .v2-site .terms-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .v2-site .contact-main {
+    grid-template-columns: 1fr !important;
+  }
+
+  .v2-site .contact-intro {
+    max-width: 680px !important;
+  }
+
+  .v2-site .partner-form {
+    min-height: 0 !important;
+  }
+}
+
+@media (max-width: 600px) {
+  :root {
+    --fr-x: 18px;
+    --fr-y: 64px;
+  }
+
+  .v2-site .v2-section:not(.v2-hero),
+  .v2-site .numbers,
+  .v2-site footer.contact {
+    padding: 64px var(--fr-x) !important;
+  }
+
+  .v2-site .nav {
+    top: 10px !important;
+    left: 10px !important;
+    right: 10px !important;
+    min-height: 62px !important;
+    padding: 7px 9px 7px 16px !important;
+  }
+
+  .v2-site .nav .logo,
+  .v2-site .nav .logo img {
+    width: 124px !important;
+  }
+
+  .v2-site .section-menu {
+    width: calc(100vw - 20px) !important;
+    max-height: calc(100svh - 84px) !important;
+    padding: 14px !important;
+  }
+
+  .v2-site .section-menu-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .v2-site .section-menu-grid a {
+    min-height: 54px !important;
+  }
+
+  .v2-site .section-label,
+  .v2-site .eyebrow {
+    font-size: 10px !important;
+  }
+
+  .v2-site .split-heading,
+  .v2-site .portfolio-head,
+  .v2-site .innovation-head,
+  .v2-site .support-head,
+  .v2-site .numbers-heading {
+    display: block !important;
+    margin: 20px 0 30px !important;
+  }
+
+  .v2-site .split-heading h2,
+  .v2-site .portfolio-head h2,
+  .v2-site .innovation-head h2,
+  .v2-site .support-head h2,
+  .v2-site .numbers-heading h2,
+  .v2-site .manufacturing-copy h2,
+  .v2-site .contact-intro h2 {
+    font-size: clamp(38px, 10.8vw, 48px) !important;
+    line-height: .95 !important;
+    padding-bottom: .12em !important;
+    margin-bottom: -.12em !important;
+  }
+
+  .v2-site .split-heading > p,
+  .v2-site .portfolio-head > p,
+  .v2-site .innovation-head > p,
+  .v2-site .support-head > p,
+  .v2-site .numbers-heading > p {
+    margin-top: 22px !important;
+    font-size: 15px !important;
+  }
+
+  .v2-site .v2-hero {
+    grid-template-rows: auto 340px !important;
+    padding: 94px var(--fr-x) 30px !important;
+    gap: 20px !important;
+  }
+
+  .v2-site .hero h1 {
+    margin: 14px 0 20px !important;
+    font-size: clamp(42px, 12vw, 52px) !important;
+    line-height: .92 !important;
+  }
+
+  .v2-site .hero .lead {
+    max-width: none !important;
+    font-size: 14px !important;
+  }
+
+  .v2-site .hero-trust {
+    margin-top: 18px !important;
+  }
+
+  .v2-site .hero-actions {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .v2-site .hero-actions .button {
+    width: 100% !important;
+    min-height: 54px !important;
+  }
+
+  .v2-site .hero-object {
+    height: 340px !important;
+  }
+
+  .v2-site .model-stage {
+    inset: 0 0 6% !important;
+    height: 94% !important;
+  }
+
+  .v2-site .hero-model {
+    transform: scale(.82) !important;
+  }
+
+  .v2-site .hero-object .note-top {
+    display: none !important;
+  }
+
+  .v2-site .hero-object .note-bottom,
+  .v2-site .model-hint {
+    bottom: 2% !important;
+    min-height: 36px !important;
+    padding: 8px 10px !important;
+    font-size: 8px !important;
+  }
+
+  .v2-site .product-card {
+    min-height: 440px !important;
+  }
+
+  .v2-site .brand-ready .v2-card-grid {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+  }
+
+  .v2-site .brand-ready .v2-card {
+    flex: 0 0 84vw !important;
+    min-width: 84vw !important;
+    min-height: 220px !important;
+    scroll-snap-align: start !important;
+  }
+
+  .v2-site .distributor-value .benefit-grid {
+    grid-template-columns: 1fr !important;
+    height: auto !important;
+    min-height: 0 !important;
+    grid-auto-rows: auto !important;
+  }
+
+  .v2-site .distributor-value .benefit {
+    min-height: 0 !important;
+    height: auto !important;
+    padding-top: 24px !important;
+    padding-bottom: 24px !important;
+    padding-right: 0 !important;
+  }
+
+  .v2-site .distributor-value .mobile-rail-status,
+  .v2-site .technology .mobile-rail-status,
+  .v2-site .ip .mobile-rail-status,
+  .v2-site .distributor-terms .mobile-rail-status {
+    display: none !important;
+  }
+
+  .v2-site .demand-stage,
+  .v2-site .commercial-body,
+  .v2-site .innovation-grid,
+  .v2-site .app-stage,
+  .v2-site .launch-system,
+  .v2-site .regional-system,
+  .v2-site .quality-body,
+  .v2-site .after-sales .v2-card-grid,
+  .v2-site .world-stage,
+  .v2-site .ip-grid,
+  .v2-site .terms-layout {
+    margin-top: 28px !important;
+  }
+
+  .v2-site .demand-lead {
+    min-height: 250px !important;
+    padding: 28px !important;
+  }
+
+  .v2-site .demand-lead strong {
+    font-size: 74px !important;
+  }
+
+  .v2-site .demand-proof {
+    grid-template-rows: repeat(3, auto) !important;
+  }
+
+  .v2-site .demand-proof article,
+  .v2-site .demand-proof article:first-child {
+    min-height: 108px !important;
+    grid-template-columns: 1fr auto !important;
+    grid-template-rows: auto auto !important;
+    gap: 6px 14px !important;
+    padding: 18px !important;
+  }
+
+  .v2-site .demand-proof small {
+    grid-column: 1 / -1 !important;
+    font-size: 9px !important;
+  }
+
+  .v2-site .demand-proof strong {
+    grid-column: 1 !important;
+    font-size: 38px !important;
+  }
+
+  .v2-site .demand-proof span {
+    grid-column: 2 !important;
+    max-width: 125px !important;
+    font-size: 10px !important;
+  }
+
+  .v2-site .value-chain > div {
+    min-height: 132px !important;
+    padding: 24px !important;
+  }
+
+  .v2-site .commercial-tags {
+    grid-template-columns: 1fr !important;
+  }
+
+  .v2-site .innovation-visual {
+    min-height: 280px !important;
+  }
+
+  .v2-site .technology .innovation-points {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: repeat(4, auto) !important;
+    gap: 8px !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .v2-site .innovation .point {
+    width: auto !important;
+    min-width: 0 !important;
+    flex: none !important;
+    min-height: 132px !important;
+  }
+
+  .v2-site .app-stage {
+    border-radius: 24px !important;
+  }
+
+  .v2-site .app-device-panel {
+    min-height: 320px !important;
+  }
+
+  .v2-site .app-device-label {
+    left: 18px !important;
+    top: 18px !important;
+    font-size: 9px !important;
+  }
+
+  .v2-site .app-device-panel > img,
+  .v2-site .app-stage > img {
+    inset: 46px 2% 8px !important;
+    width: 96% !important;
+    height: calc(100% - 54px) !important;
+  }
+
+  .v2-site .app-device-stat {
+    right: 14px !important;
+    bottom: 14px !important;
+    width: 144px !important;
+    min-height: 84px !important;
+    padding: 14px !important;
+  }
+
+  .v2-site .app-device-stat strong {
+    font-size: 32px !important;
+  }
+
+  .v2-site .app-feature-panel {
+    padding: 22px 16px !important;
+    gap: 18px !important;
+  }
+
+  .v2-site .app-panel-head {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .v2-site .app-panel-head strong {
+    font-size: 30px !important;
+    text-align: left !important;
+  }
+
+  .v2-site .app-feature-panel .app-flow {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .v2-site .app-feature-panel .app-flow article {
+    min-height: 116px !important;
+    grid-template-columns: 24px minmax(0, 1fr) !important;
+    padding: 14px !important;
+  }
+
+  .v2-site .app-feature-panel .app-flow article > strong {
+    font-size: 14px !important;
+  }
+
+  .v2-site .app-feature-panel .app-flow article > span {
+    font-size: 12px !important;
+  }
+
+  .v2-site .app-feature-panel .legal-note {
+    font-size: 11px !important;
+  }
+
+  .v2-site .launch-bundle {
+    min-height: 270px !important;
+    padding: 26px !important;
+  }
+
+  .v2-site .launch-bundle strong b {
+    font-size: 72px !important;
+  }
+
+  .v2-site .launch-assets li {
+    min-height: 108px !important;
+    grid-template-columns: 28px minmax(0, 1fr) !important;
+    padding: 14px !important;
+  }
+
+  .v2-site .launch-assets strong {
+    font-size: 14px !important;
+  }
+
+  .v2-site .launch-assets span {
+    font-size: 11px !important;
+  }
+
+  .v2-site .power-config,
+  .v2-site .localization-stack {
+    min-height: 0 !important;
+    padding: 18px !important;
+  }
+
+  .v2-site .power-options article {
+    min-height: 142px !important;
+    padding: 50px 14px 16px !important;
+  }
+
+  .v2-site .power-options strong {
+    font-size: 32px !important;
+  }
+
+  .v2-site .power-options span {
+    font-size: 10px !important;
+  }
+
+  .v2-site .localization-stack li {
+    min-height: 94px !important;
+    grid-template-columns: 24px minmax(0, 1fr) !important;
+    padding: 13px !important;
+    font-size: 12px !important;
+  }
+
+  .v2-site .manufacturing-layout {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto auto 280px auto !important;
+    gap: 20px !important;
+  }
+
+  .v2-site .manufacturing-copy .section-label {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+  }
+
+  .v2-site .manufacturing-copy h2 {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    margin-top: 0 !important;
+  }
+
+  .v2-site .manufacturing-copy > p {
+    grid-column: 1 !important;
+    grid-row: 3 !important;
+    margin: 0 !important;
+    font-size: 15px !important;
+  }
+
+  .v2-site .factory-visual,
+  .v2-site .manufacturing-layout .factory-visual {
+    grid-column: 1 !important;
+    grid-row: 4 !important;
+    height: 280px !important;
+    border-radius: 22px !important;
+  }
+
+  .v2-site .manufacturing-metrics {
+    grid-column: 1 !important;
+    grid-row: 5 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    box-shadow: var(--fr-shadow) !important;
+  }
+
+  .v2-site .manufacturing-metrics > div {
+    padding: 14px 9px !important;
+  }
+
+  .v2-site .manufacturing-metrics strong {
+    font-size: clamp(24px, 7vw, 34px) !important;
+  }
+
+  .v2-site .manufacturing-metrics span {
+    font-size: 9px !important;
+  }
+
+  .v2-site .quality-path {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .v2-site .quality-path::before {
+    display: block !important;
+    left: 45px !important;
+    right: auto !important;
+    top: 44px !important;
+    bottom: 44px !important;
+    width: 1px !important;
+    height: auto !important;
+  }
+
+  .v2-site .quality-path article,
+  .v2-site .quality-path article.active {
+    min-height: 132px !important;
+    display: grid !important;
+    grid-template-columns: 52px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 18px !important;
+    padding: 22px !important;
+  }
+
+  .v2-site .quality-path article > div {
+    margin: 0 !important;
+  }
+
+  .v2-site .defect-rate {
+    grid-template-columns: 1fr auto !important;
+    gap: 16px !important;
+  }
+
+  .v2-site .defect-rate span {
+    display: none !important;
+  }
+
+  .v2-site .after-sales .v2-card-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .v2-site .after-sales .v2-card {
+    min-height: 180px !important;
+  }
+
+  .v2-site .world-stage {
+    grid-template-rows: 150px auto !important;
+  }
+
+  .v2-site .world-stage::before {
+    height: 150px !important;
+  }
+
+  .v2-site .world-stage > strong {
+    padding-left: 20px !important;
+    font-size: 76px !important;
+  }
+
+  .v2-site .world-stage > span {
+    padding-right: 20px !important;
+    font-size: 9px !important;
+  }
+
+  .v2-site .world-stage ol {
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-rows: repeat(3, auto) !important;
+    gap: 7px !important;
+    padding: 9px !important;
+  }
+
+  .v2-site .world-stage li {
+    min-height: 100px !important;
+    padding: 46px 12px 12px !important;
+    font-size: 12px !important;
+  }
+
+  .v2-site .ip .ip-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  .v2-site .ip-grid article {
+    min-height: 170px !important;
+    padding: 18px !important;
+  }
+
+  .v2-site .ip-grid article:first-child {
+    grid-column: 1 !important;
+  }
+
+  .v2-site .ip-grid article strong {
+    font-size: 42px !important;
+  }
+
+  .v2-site .ip-grid article:first-child strong {
+    font-size: clamp(36px, 12vw, 54px) !important;
+  }
+
+  .v2-site .ip-grid article span {
+    font-size: 12px !important;
+  }
+
+  .v2-site .terms-list {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  .v2-site .terms-list span {
+    position: relative !important;
+    inset: auto !important;
+    min-height: 88px !important;
+    height: auto !important;
+    padding: 14px !important;
+    font-size: 12px !important;
+  }
+
+  .v2-site .distributor-terms .terms-table {
+    display: grid !important;
+    position: relative !important;
+    inset: auto !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  .v2-site .terms-table > div {
+    min-height: 112px !important;
+  }
+
+  .v2-site .terms-table dt,
+  .v2-site .terms-table dd {
+    font-size: 13px !important;
+  }
+
+  .v2-site footer.contact {
+    padding-top: 54px !important;
+    padding-bottom: 36px !important;
+  }
+
+  .v2-site .contact-top {
+    align-items: flex-start !important;
+    gap: 24px !important;
+    padding-bottom: 20px !important;
+  }
+
+  .v2-site .contact-top .logo,
+  .v2-site .contact-top .logo img {
+    width: 140px !important;
+  }
+
+  .v2-site .contact-top .section-label {
+    max-width: 170px !important;
+    justify-content: flex-end !important;
+    text-align: right !important;
+    font-size: 8px !important;
+  }
+
+  .v2-site .contact-main {
+    gap: 34px !important;
+    margin: 40px 0 !important;
+  }
+
+  .v2-site .contact-kicker {
+    margin-bottom: 20px !important;
+  }
+
+  .v2-site .contact-intro h2 {
+    margin-bottom: 24px !important;
+    color: #fff !important;
+  }
+
+  .v2-site .contact-intro > p:not(.contact-kicker) {
+    font-size: 14px !important;
+  }
+
+  .v2-site .contact-channels {
+    margin-top: 24px !important;
+  }
+
+  .v2-site .contact-channels button {
+    grid-template-columns: 72px minmax(0, 1fr) 18px !important;
+  }
+
+  .v2-site .partner-form {
+    padding: 24px 18px !important;
+    border-radius: 22px !important;
+  }
+
+  .v2-site .form-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .v2-site .contact-bottom {
+    gap: 16px !important;
+    font-size: 8px !important;
+  }
+
+  .v2-site .contact-bottom span:nth-child(2) {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2-site *,
+  .v2-site *::before,
+  .v2-site *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,960 @@
+/* DEMIAND — approval-ready visual QA layer.
+   Resolves the remaining cascade conflicts without disturbing the approved
+   desktop art direction. */
+
+:root {
+  --ar-section-y: clamp(72px, 8vw, 120px);
+  --ar-mobile-x: 18px;
+  --ar-radius: 24px;
+}
+
+body.v2-site,
+.v2-site main {
+  overflow-x: clip !important;
+}
+
+/* Content is allowed to define section height. The previous viewport cap was
+   the source of the clipped cards and false blank endings. */
+.v2-site .v2-section:not(.v2-hero),
+.v2-site .numbers,
+.v2-site footer.contact {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+.v2-site h1,
+.v2-site h2,
+.v2-site h3,
+.v2-site strong {
+  overflow: visible !important;
+}
+
+.v2-site .section-label,
+.v2-site .eyebrow {
+  line-height: 1.35 !important;
+}
+
+.v2-site .quality-path p,
+.v2-site .manufacturing-metrics span,
+.v2-site .factory-visual figcaption,
+.v2-site .app-feature-panel .legal-note,
+.v2-site .app-feature-panel .app-flow article span {
+  font-size: 10px !important;
+}
+
+.v2-site .after-sales .v2-card p {
+  font-size: 12px !important;
+}
+
+.v2-site .ip-grid article::after {
+  background: transparent !important;
+  border: 1px solid rgba(239, 0, 27, .22) !important;
+}
+
+.v2-site .portfolio-swipe-status,
+.v2-site .mobile-rail-status {
+  align-items: center !important;
+  column-gap: 12px !important;
+}
+
+.v2-site .portfolio-swipe-status > span,
+.v2-site .portfolio-swipe-status > b,
+.v2-site .mobile-rail-status > span,
+.v2-site .mobile-rail-status > b {
+  display: inline-block;
+  line-height: 1.2 !important;
+}
+
+/* Keep the floating header optically stable during scroll and image decode. */
+.v2-site .nav .logo,
+.v2-site .nav .logo img {
+  display: block !important;
+  flex: 0 0 auto !important;
+  object-fit: contain !important;
+  object-position: left center !important;
+  transform: none !important;
+  clip-path: none !important;
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .v2-site .v2-hero {
+    align-content: center !important;
+  }
+
+  .v2-site .hero-copy {
+    padding-bottom: 0 !important;
+  }
+
+  .v2-site .contact-main {
+    height: auto !important;
+    min-height: 610px !important;
+  }
+
+  .v2-site .contact-intro,
+  .v2-site .partner-form {
+    height: auto !important;
+    min-height: 610px !important;
+  }
+
+  .v2-site .contact-channels button {
+    grid-template-columns: minmax(74px, .42fr) minmax(0, 1fr) auto !important;
+    min-height: 62px !important;
+    padding: 10px 12px !important;
+  }
+
+  .v2-site .contact-channels small,
+  .v2-site .contact-channels span {
+    font-size: 10px !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .v2-site .portfolio-swipe-status {
+    display: grid !important;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px !important;
+    padding-top: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  :root {
+    --cr-x: var(--ar-mobile-x);
+    --cr-top: 72px;
+    --cr-bottom: 54px;
+  }
+
+  .v2-site .section-pad,
+  .v2-site .numbers,
+  .v2-site footer.contact {
+    padding: 72px var(--ar-mobile-x) 54px !important;
+    row-gap: 14px !important;
+  }
+
+  .v2-site .v2-section:not(.v2-hero),
+  .v2-site .numbers,
+  .v2-site footer.contact {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .v2-site h2,
+  .v2-site .split-heading h2,
+  .v2-site .innovation-head h2,
+  .v2-site .support-head h2,
+  .v2-site .manufacturing-copy h2,
+  .v2-site .contact h2 {
+    font-size: clamp(36px, 10.6vw, 46px) !important;
+    line-height: .94 !important;
+  }
+
+  .v2-site .split-heading > p,
+  .v2-site .innovation-head > p,
+  .v2-site .support-head > p,
+  .v2-site .portfolio-head > p,
+  .v2-site .numbers-heading > p {
+    margin-top: 4px !important;
+    font-size: 15px !important;
+    line-height: 1.42 !important;
+  }
+
+  .v2-site .section-label {
+    min-height: 0 !important;
+    font-size: 11px !important;
+  }
+
+  .v2-site .nav {
+    left: 12px !important;
+    right: 12px !important;
+    width: auto !important;
+    min-height: 64px !important;
+    padding: 8px 10px 8px 18px !important;
+  }
+
+  .v2-site .nav .logo,
+  .v2-site .nav .logo img {
+    width: 124px !important;
+    height: auto !important;
+  }
+
+  /* Hero: remove the dead lower band while keeping the appliance dominant. */
+  .v2-site .v2-hero {
+    height: auto !important;
+    min-height: 100svh !important;
+    max-height: none !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto minmax(250px, 32svh) !important;
+    align-content: start !important;
+    padding: 92px var(--ar-mobile-x) 26px !important;
+    gap: 18px !important;
+  }
+
+  .v2-site .hero-copy {
+    padding-bottom: 0 !important;
+  }
+
+  .v2-site .hero h1 {
+    margin: 10px 0 12px !important;
+    font-size: clamp(40px, 12.2vw, 50px) !important;
+    line-height: .9 !important;
+  }
+
+  .v2-site .hero .lead {
+    margin: 0 !important;
+    font-size: 14px !important;
+    line-height: 1.42 !important;
+  }
+
+  .v2-site .hero-trust {
+    width: 100% !important;
+    margin-top: 12px !important;
+    justify-content: space-between;
+  }
+
+  .v2-site .hero-trust span {
+    font-size: 9px !important;
+  }
+
+  .v2-site .hero-actions {
+    margin-top: 12px !important;
+  }
+
+  .v2-site .hero-actions .button {
+    min-height: 48px !important;
+    font-size: 11px !important;
+  }
+
+  .v2-site .hero-object {
+    align-self: stretch !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 250px !important;
+  }
+
+  .v2-site .model-stage {
+    inset: 0 !important;
+    height: 100% !important;
+  }
+
+  .v2-site .hero-model {
+    transform: scale(.82) !important;
+  }
+
+  .v2-site .hero-footer {
+    display: none !important;
+  }
+
+  /* Product rail remains swipeable, now with a clean, readable status row. */
+  .v2-site .products {
+    height: auto !important;
+    min-height: 0 !important;
+    padding-bottom: 4px;
+  }
+
+  .v2-site .products > .product-card {
+    height: 440px !important;
+    min-height: 440px !important;
+    grid-template-rows: auto 245px 1fr !important;
+  }
+
+  .v2-site .products > .product-card .product-image {
+    height: 245px !important;
+  }
+
+  .v2-site .portfolio-swipe-status,
+  .v2-site .mobile-rail-status {
+    display: grid !important;
+    grid-template-columns: auto 1fr auto !important;
+    gap: 12px !important;
+    min-height: 34px;
+    margin-top: 8px !important;
+    font-size: 10px !important;
+  }
+
+  .v2-site .portfolio-swipe-status > div,
+  .v2-site .mobile-rail-status .rail-bars {
+    min-width: 0;
+  }
+
+  .v2-site .card-meta span {
+    font-size: 10px !important;
+  }
+
+  .v2-site .card-content p {
+    font-size: 13px !important;
+    line-height: 1.45 !important;
+  }
+
+  /* Editorial rails: compact enough to scan, large enough to read. */
+  .v2-site .brand-ready .v2-card,
+  .v2-site .benefit,
+  .v2-site .ip-grid article {
+    min-height: 230px !important;
+    height: 230px !important;
+    padding: 22px !important;
+  }
+
+  .v2-site .brand-ready .v2-card h3,
+  .v2-site .benefit h3 {
+    margin: 54px 0 10px !important;
+    font-size: 21px !important;
+  }
+
+  .v2-site .brand-ready .v2-card p,
+  .v2-site .benefit p {
+    font-size: 14px !important;
+    line-height: 1.45 !important;
+  }
+
+  .v2-site .signal-strip {
+    min-height: 52px !important;
+    margin-top: 8px !important;
+    font-size: 10px !important;
+  }
+
+  /* Demand: preserve the red hero metric and turn the proof into readable rows. */
+  .v2-site .demand-stage {
+    height: auto !important;
+    min-height: 0 !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto !important;
+    gap: 10px !important;
+  }
+
+  .v2-site .demand-lead {
+    min-width: 0 !important;
+    min-height: 240px !important;
+    padding: 24px !important;
+  }
+
+  .v2-site .demand-lead small,
+  .v2-site .demand-lead > span {
+    font-size: 10px !important;
+  }
+
+  .v2-site .demand-lead p {
+    display: block !important;
+    max-width: 270px;
+    margin-top: 18px !important;
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+  }
+
+  .v2-site .demand-proof {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: repeat(3, auto) !important;
+    gap: 8px !important;
+  }
+
+  .v2-site .demand-proof article,
+  .v2-site .demand-proof article:first-child {
+    min-height: 82px !important;
+    display: grid !important;
+    grid-template-columns: minmax(92px, .8fr) auto minmax(92px, 1fr) !important;
+    grid-template-rows: 1fr !important;
+    align-items: center !important;
+    gap: 10px;
+    padding: 14px 16px !important;
+    border-radius: 18px !important;
+  }
+
+  .v2-site .demand-proof small,
+  .v2-site .demand-proof span {
+    grid-column: auto !important;
+    align-self: center !important;
+    font-size: 9px !important;
+    line-height: 1.25 !important;
+  }
+
+  .v2-site .demand-proof strong {
+    align-self: center !important;
+    font-size: 30px !important;
+  }
+
+  /* Commercial model: show the complete flow instead of hiding two thirds in a rail. */
+  .v2-site .commercial-body {
+    display: grid !important;
+    gap: 10px !important;
+  }
+
+  .v2-site .value-chain {
+    height: auto !important;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    overflow: visible !important;
+  }
+
+  .v2-site .value-chain > div {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 116px !important;
+    padding: 18px 20px !important;
+  }
+
+  .v2-site .value-chain > div small {
+    position: static !important;
+  }
+
+  .v2-site .value-chain strong {
+    margin: 14px 0 5px !important;
+    font-size: 24px !important;
+  }
+
+  .v2-site .value-chain span {
+    font-size: 13px !important;
+  }
+
+  .v2-site .value-chain > b {
+    display: none !important;
+  }
+
+  .v2-site .commercial-tags span {
+    min-height: 72px !important;
+    padding: 14px !important;
+    font-size: 13px !important;
+  }
+
+  /* Product technology: retain the horizontal detail rail but improve legibility. */
+  .v2-site .innovation-grid {
+    height: auto !important;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: 250px auto auto !important;
+    gap: 10px !important;
+    overflow: visible !important;
+  }
+
+  .v2-site .innovation-grid > .mobile-rail-status,
+  .v2-site .terms-layout > .mobile-rail-status {
+    position: relative !important;
+    grid-column: 1 / -1 !important;
+    width: 100%;
+  }
+
+  .v2-site .innovation-photo-frame {
+    height: 250px !important;
+  }
+
+  .v2-site .technology .innovation-points {
+    display: flex !important;
+    height: auto !important;
+    min-height: 148px !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    scroll-snap-type: x mandatory;
+    gap: 10px !important;
+  }
+
+  .v2-site .innovation .point {
+    flex: 0 0 calc(100vw - 54px) !important;
+    width: auto !important;
+    min-height: 148px !important;
+    padding: 18px !important;
+    scroll-snap-align: start;
+  }
+
+  .v2-site .innovation .point > span {
+    font-size: 10px !important;
+  }
+
+  .v2-site .innovation .point h3 {
+    margin: 32px 0 7px !important;
+    font-size: 19px !important;
+  }
+
+  .v2-site .innovation .point p {
+    font-size: 13px !important;
+  }
+
+  /* SmartCook: two deliberate modules with usable type, never a compressed poster. */
+  .v2-site .app-stage {
+    height: auto !important;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: 250px auto !important;
+    gap: 10px !important;
+    padding: 0 !important;
+  }
+
+  .v2-site .app-device-panel,
+  .v2-site .app-feature-panel {
+    min-height: 0 !important;
+  }
+
+  .v2-site .app-device-label {
+    font-size: 9px !important;
+  }
+
+  .v2-site .app-device-stat {
+    width: 156px !important;
+  }
+
+  .v2-site .app-device-stat span {
+    font-size: 9px !important;
+  }
+
+  .v2-site .app-feature-panel {
+    padding: 16px !important;
+    gap: 12px !important;
+  }
+
+  .v2-site .app-panel-head small {
+    font-size: 9px !important;
+  }
+
+  .v2-site .app-panel-head strong {
+    font-size: 20px !important;
+  }
+
+  .v2-site .app-feature-panel .app-flow {
+    gap: 8px !important;
+  }
+
+  .v2-site .app-feature-panel .app-flow article {
+    min-height: 72px !important;
+    padding: 10px 12px !important;
+    grid-template-columns: 20px 1fr !important;
+  }
+
+  .v2-site .app-feature-panel .app-flow article i,
+  .v2-site .app-feature-panel .app-flow article strong {
+    font-size: 11px !important;
+  }
+
+  .v2-site .app-feature-panel .app-flow article span {
+    font-size: 9px !important;
+  }
+
+  .v2-site .app-feature-panel .legal-note {
+    font-size: 10px !important;
+    line-height: 1.35 !important;
+  }
+
+  /* Launch and localization systems expand to the content they contain. */
+  .v2-site .launch-system,
+  .v2-site .regional-system {
+    height: auto !important;
+    min-height: 0 !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto !important;
+    gap: 10px !important;
+  }
+
+  .v2-site .launch-bundle {
+    min-height: 220px !important;
+    padding: 22px !important;
+  }
+
+  .v2-site .launch-bundle strong {
+    margin: 18px 0 10px !important;
+    font-size: 30px !important;
+  }
+
+  .v2-site .launch-bundle p {
+    max-width: 260px;
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+  }
+
+  .v2-site .launch-assets {
+    gap: 8px !important;
+  }
+
+  .v2-site .launch-assets li {
+    min-height: 86px !important;
+    padding: 12px !important;
+    grid-template-columns: 22px 1fr !important;
+  }
+
+  .v2-site .launch-assets i,
+  .v2-site .launch-assets span {
+    font-size: 9px !important;
+  }
+
+  .v2-site .launch-assets strong {
+    font-size: 12px !important;
+  }
+
+  .v2-site .power-config,
+  .v2-site .localization-stack {
+    padding: 18px !important;
+  }
+
+  .v2-site .power-head small,
+  .v2-site .power-head span,
+  .v2-site .localization-stack > small {
+    font-size: 9px !important;
+  }
+
+  .v2-site .power-options article {
+    min-height: 118px !important;
+    padding: 28px 12px 14px !important;
+  }
+
+  .v2-site .power-options i,
+  .v2-site .power-options span,
+  .v2-site .power-config > p {
+    font-size: 9px !important;
+  }
+
+  .v2-site .power-options strong {
+    font-size: 31px !important;
+  }
+
+  .v2-site .localization-stack li {
+    min-height: 48px;
+    padding: 12px 0 !important;
+    grid-template-columns: 24px 1fr !important;
+    font-size: 11px !important;
+  }
+
+  /* Manufacturing metrics and caption are small metadata, not microprint. */
+  .v2-site .manufacturing-layout {
+    height: auto !important;
+    min-height: 0 !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto 245px !important;
+    gap: 10px !important;
+  }
+
+  .v2-site .manufacturing-copy {
+    height: auto !important;
+    min-height: 310px !important;
+    padding: 22px !important;
+  }
+
+  .v2-site .manufacturing-copy h2 {
+    margin-top: 20px !important;
+    font-size: 32px !important;
+  }
+
+  .v2-site .manufacturing-copy > p {
+    margin-top: 16px !important;
+    font-size: 13px !important;
+  }
+
+  .v2-site .manufacturing-metrics {
+    margin-top: 18px;
+    padding-top: 16px !important;
+  }
+
+  .v2-site .manufacturing-metrics strong {
+    font-size: 25px !important;
+  }
+
+  .v2-site .manufacturing-metrics span,
+  .v2-site .factory-visual figcaption {
+    font-size: 9px !important;
+    line-height: 1.25 !important;
+  }
+
+  .v2-site .manufacturing-layout .factory-visual {
+    height: 245px !important;
+  }
+
+  /* Quality and after-sales: let every card finish before the section ends. */
+  .v2-site .quality-body {
+    height: auto !important;
+    min-height: 0 !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto !important;
+  }
+
+  .v2-site .quality-path {
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-rows: auto auto !important;
+  }
+
+  .v2-site .quality-path article,
+  .v2-site .quality-path article.active {
+    min-height: 126px !important;
+    padding: 12px !important;
+    grid-template-columns: 38px 1fr !important;
+  }
+
+  .v2-site .quality-path article h3 {
+    font-size: 13px !important;
+  }
+
+  .v2-site .quality-path article p {
+    display: block !important;
+    font-size: 10px !important;
+    line-height: 1.25 !important;
+  }
+
+  .v2-site .defect-rate {
+    min-height: 76px !important;
+  }
+
+  .v2-site .after-sales .v2-card-grid {
+    height: auto !important;
+    grid-template-columns: 1fr 1fr !important;
+    overflow: hidden !important;
+  }
+
+  .v2-site .after-sales .v2-card {
+    width: auto !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 188px !important;
+    padding: 16px !important;
+  }
+
+  .v2-site .after-sales .v2-card h3 {
+    font-size: 15px !important;
+    line-height: 1.1 !important;
+  }
+
+  .v2-site .after-sales .v2-card p {
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+  }
+
+  /* Global footprint and IP keep their editorial impact without collisions. */
+  .v2-site .world-stage {
+    height: auto !important;
+    min-height: 0 !important;
+    grid-template-rows: 108px auto !important;
+  }
+
+  .v2-site .world-stage::before {
+    height: 108px !important;
+  }
+
+  .v2-site .world-stage > span {
+    font-size: 9px !important;
+  }
+
+  .v2-site .world-stage ol {
+    min-height: 210px;
+    padding: 10px !important;
+  }
+
+  .v2-site .world-stage li {
+    min-height: 58px !important;
+    font-size: 10px !important;
+  }
+
+  .v2-site .ip-grid {
+    height: auto !important;
+    min-height: 0 !important;
+    padding-bottom: 4px;
+  }
+
+  .v2-site .ip-grid article {
+    min-height: 210px !important;
+    height: 210px !important;
+  }
+
+  .v2-site .ip-grid article::after {
+    left: auto !important;
+    top: auto !important;
+    right: 20px !important;
+    bottom: 20px !important;
+    width: 72px !important;
+    height: 72px !important;
+    opacity: .55 !important;
+    background: transparent !important;
+    border: 1px solid rgba(239, 0, 27, .2) !important;
+  }
+
+  .v2-site .ip-grid article strong,
+  .v2-site .ip-grid article:first-child strong {
+    position: relative;
+    z-index: 2;
+    margin-top: 54px !important;
+    font-size: 37px !important;
+  }
+
+  .v2-site .ip-grid article span {
+    position: relative;
+    z-index: 2;
+    font-size: 13px !important;
+  }
+
+  /* Terms are fully visible: compact overview plus readable swipe cards. */
+  .v2-site .terms-layout {
+    height: auto !important;
+    min-height: 0 !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto auto !important;
+    gap: 10px !important;
+    overflow: visible !important;
+  }
+
+  .v2-site .terms-list {
+    min-height: 130px;
+  }
+
+  .v2-site .terms-list span {
+    min-height: 64px;
+    padding: 12px 12px 12px 28px !important;
+    font-size: 12px !important;
+  }
+
+  .v2-site .terms-table > div {
+    min-height: 154px !important;
+    justify-content: center;
+  }
+
+  .v2-site .terms-table dt {
+    font-size: 12px !important;
+  }
+
+  .v2-site .terms-table dd {
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Conversion area: natural-height panels, readable contacts and controls. */
+  .v2-site footer.contact {
+    padding-top: 72px !important;
+    padding-bottom: 18px !important;
+  }
+
+  .v2-site .contact-main {
+    height: auto !important;
+    min-height: 0 !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto !important;
+    gap: 10px !important;
+  }
+
+  .v2-site .contact-intro,
+  .v2-site .partner-form {
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 20px !important;
+  }
+
+  .v2-site .contact-intro {
+    min-height: 390px !important;
+  }
+
+  .v2-site .contact-intro h2 {
+    font-size: 36px !important;
+  }
+
+  .v2-site .contact-intro > p:not(.section-label) {
+    font-size: 13px !important;
+    line-height: 1.45 !important;
+  }
+
+  .v2-site .contact-channels {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .v2-site .contact-channels button {
+    min-height: 52px !important;
+    padding: 10px 12px !important;
+    display: grid !important;
+    grid-template-columns: 72px minmax(0, 1fr) auto !important;
+    align-items: center !important;
+    gap: 8px !important;
+    overflow: hidden !important;
+  }
+
+  .v2-site .contact-channels small,
+  .v2-site .contact-channels span {
+    font-size: 10px !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .v2-site .contact-channels b {
+    display: block !important;
+  }
+
+  .v2-site .partner-form {
+    min-height: 430px !important;
+  }
+
+  .v2-site .form-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .v2-site .partner-form label > span {
+    font-size: 10px !important;
+  }
+
+  .v2-site .partner-form input,
+  .v2-site .partner-form select {
+    min-height: 48px !important;
+    font-size: 13px !important;
+  }
+
+  .v2-site .form-submit {
+    display: grid !important;
+    gap: 12px;
+  }
+
+  .v2-site .form-submit small {
+    font-size: 10px !important;
+  }
+
+  .v2-site .form-submit .button {
+    min-height: 50px !important;
+    font-size: 11px !important;
+  }
+
+  .v2-site .contact-bottom {
+    display: flex !important;
+    font-size: 9px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  :root { --ar-mobile-x: 14px; }
+
+  .v2-site h2,
+  .v2-site .split-heading h2,
+  .v2-site .innovation-head h2,
+  .v2-site .support-head h2,
+  .v2-site .contact h2 {
+    font-size: 34px !important;
+  }
+
+  .v2-site .hero h1 {
+    font-size: 39px !important;
+  }
+
+  .v2-site .demand-proof article,
+  .v2-site .demand-proof article:first-child {
+    grid-template-columns: 82px auto 1fr !important;
+    padding: 12px !important;
+  }
+
+  .v2-site .demand-proof strong {
+    font-size: 26px !important;
+  }
+
+  .v2-site .after-sales .v2-card-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .v2-site .after-sales .v2-card {
+    min-height: 164px !important;
+  }
+
+  .v2-site .brand-ready .v2-card {
+    min-height: 250px !important;
+    height: 250px !important;
+  }
+
+  .v2-site .contact-channels button {
+    grid-template-columns: 60px minmax(0, 1fr) auto !important;
+    gap: 6px !important;
+  }
+
+  .v2-site .contact-channels small,
+  .v2-site .contact-channels span {
+    font-size: 9px !important;
+  }
+}
