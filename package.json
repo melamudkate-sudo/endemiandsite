@@ -1,0 +1,12 @@
+{
+  "name": "demiand-international-partners",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DEMIAND international dealer website",
+  "scripts": {
+    "dev": "node scripts/serve.cjs",
+    "check": "node scripts/check.cjs",
+    "build": "node scripts/check.cjs && node scripts/build.cjs"
+  },
+  "engines": { "node": ">=20" }
+}
