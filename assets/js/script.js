@@ -70,20 +70,18 @@
     });
   });
 
-  const launchBundle = document.querySelector('.launch-bundle');
   const launchChoices = [...document.querySelectorAll('.launch-choice')];
-  const overview = {
-    number: launchBundle.querySelector('strong b').textContent,
-    title: launchBundle.querySelector('strong span').innerHTML,
-    description: launchBundle.querySelector('p').textContent
-  };
+  const launchFrames = [...document.querySelectorAll('.launch-frame')];
   function selectLaunch(choice) {
     launchChoices.forEach(item => item.setAttribute('aria-pressed', String(item === choice)));
-    launchBundle.querySelector('strong b').textContent = choice ? choice.querySelector('i').textContent : overview.number;
-    launchBundle.querySelector('strong span').innerHTML = choice ? choice.querySelector('strong').innerHTML : overview.title;
-    launchBundle.querySelector('p').textContent = choice ? choice.querySelector('.asset-description').textContent : overview.description;
-    launchBundle.classList.remove('is-changing');
-    requestAnimationFrame(() => launchBundle.classList.add('is-changing'));
+    const selected = choice?.dataset.preview || 'brand';
+    let slot = 1;
+    launchFrames.forEach(frame => {
+      frame.dataset.slot = frame.dataset.preview === selected ? '0' : String(slot++);
+      frame.classList.toggle('is-dominant', frame.dataset.preview === selected);
+      frame.style.order = frame.dataset.preview === selected ? '-1' : '';
+    });
+    document.querySelector('.launch-status').textContent = choice ? choice.querySelector('strong').textContent + ' preview selected' : 'Launch kit overview';
   }
   launchChoices.forEach(choice => choice.addEventListener('click', () => selectLaunch(choice.getAttribute('aria-pressed') === 'true' ? null : choice)));
   document.querySelector('.launch-reset').addEventListener('click', () => selectLaunch(null));
@@ -95,7 +93,7 @@
     partnerTerms.forEach(item => { item.open = item === detail && expand; });
   }));
 
-  document.querySelectorAll('.innovation-photo-frame,.quality-path article').forEach(node => node.classList.add('reveal'));
+  document.querySelectorAll('.innovation-photo-frame').forEach(node => node.classList.add('reveal'));
   const revealObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
@@ -104,12 +102,31 @@
     });
   }, { threshold: .06, rootMargin: '0px 0px -3% 0px' });
   document.querySelectorAll('.reveal').forEach(node => revealObserver.observe(node));
-  document.querySelectorAll('.products,.four-cards,.benefit-grid,.innovation-points,.ip-grid,.connected-features,.quality-path').forEach(group => {
+  document.querySelectorAll('.products,.benefit-grid,.innovation-points,.ip-grid,.connected-features,.quality-contact,.support-backbone').forEach(group => {
     [...group.children].forEach((node, index) => {
       node.style.transitionDelay = Math.min(index * 75, 225) + 'ms';
     });
   });
-  const photographs = [...document.querySelectorAll('.factory-photo,.innovation-photo-frame img')];
+  const counterObserver = new IntersectionObserver(entries => {
+    entries.forEach(({target, isIntersecting}) => {
+      if (!isIntersecting) return;
+      counterObserver.unobserve(target);
+      if (reducedMotion.matches) return;
+      const end = Number(target.dataset.count);
+      const decimals = Number(target.dataset.decimals || 0);
+      const start = performance.now();
+      const tick = now => {
+        const progress = Math.min((now - start) / 1350, 1);
+        target.textContent = (end * (1 - Math.pow(1 - progress, 4))).toFixed(decimals);
+        if (progress < 1 && !reducedMotion.matches) requestAnimationFrame(tick);
+        else target.textContent = end.toFixed(decimals);
+      };
+      requestAnimationFrame(tick);
+    });
+  }, {threshold:.8});
+  document.querySelectorAll('[data-count]').forEach(node => counterObserver.observe(node));
+
+  const photographs = [...document.querySelectorAll('.innovation-photo-frame img')];
   let scrollQueued = false;
   function updateScroll() {
     scrollQueued = false;

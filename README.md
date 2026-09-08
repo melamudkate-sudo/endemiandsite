@@ -54,3 +54,41 @@ scripts/    — просмотр, проверка и сборка без зав
 - Шрифты загружаются с Google Fonts, компонент 3D — с jsDelivr. Для них нужен интернет.
 - Фирменные изображения и 3D-модель входят в папку; права на них остаются у владельца.
 - Открытая публикация GitHub Pages делает файлы сайта доступными посетителям.
+
+
+## Визуальная версия для согласования
+
+Изменения внесены непосредственно в эту папку. Секции на desktop не разбиваются
+на дополнительные экраны; размер визуалов зависит от высоты окна. Основные
+контрольные размеры: 1440×900 и 1920×1080.
+
+### Замена визуальных заготовок
+
+В `index.html` найдите комментарии `REPLACE WITH:`. Подготовлено 9 мест для изображений:
+
+- Launch Kit: Brand Guidelines, Product / Marketplace Content,
+  Social / Campaign Creative, Sales / Training Materials.
+- Localization: Localization System — продукт, вилка, инструкция и упаковка.
+- Quality: Incoming Inspection, Assembly, Functional Testing, Packaging.
+
+Внутри соответствующего `.media-placeholder` замените элемент
+`<span class="placeholder-label">…</span>` на `<img src="assets/images/your-image.jpg"
+alt="Краткое описание на английском" loading="lazy" />`. Сохраните внешний контейнер,
+подписи и атрибуты `data-preview` / `data-slot`: они нужны для переключения Launch Kit.
+Все четыре изображения Launch Kit доступны через шесть категорий материалов.
+
+Для Manufacturing замените `.production-video` внутри `.production-film` на:
+
+```html
+<video controls playsinline preload="metadata" aria-label="DEMIAND production tour">
+  <source src="assets/video/production.mp4" type="video/mp4" />
+</video>
+```
+
+Создайте `assets/video` при добавлении видео. Его кадр должен быть 16:9.
+Удалите `figcaption` этой заготовки при подключении видео, чтобы подпись не закрывала
+нативные элементы управления. До замены это визуальная заготовка, а не работающий плеер.
+
+Карта использует статический SVG на основе общедоступных контуров Natural Earth
+(world-atlas 2.0.2). Узлы и связи схематичны и не задают подтверждённый список стран экспорта.
+Новых браузерных библиотек и зависимостей сборки не добавлено.

@@ -1,39 +1,7 @@
-/* Keep readable compositions within the available viewport. Large compositions
-   become two adjacent, labelled screens; original nodes and listeners survive. */
+/* Responsive rails preserve keyboard access without splitting sections. */
 (() => {
-  const sections = [...document.querySelectorAll('main > section, footer.contact')];
-  const records = [];
-  const contentSelectors = [
-    '.hero-object', '.products', '.market-system', '.four-cards', '.benefit-grid', '.demand-stage',
-    '.commerce-layout', '.innovation-grid', '.connected-layout', '.launch-system',
-    '.regional-system', '.quality-body', '.world-stage', '.ip-grid', '.terms-accordion'
-  ];
-  contentSelectors.push('.manufacturing-layout');
-  contentSelectors.push('.contact-main');
-
-  for (const section of sections) {
-    section.classList.add('viewport-section');
-    const content = contentSelectors.map(s => section.querySelector(s)).find(Boolean);
-    if (!content) continue;
-    const marker = document.createComment('composition content');
-    content.before(marker);
-    const continuation = document.createElement('section');
-    continuation.className = `${section.className} viewport-continuation`;
-    continuation.removeAttribute('id');
-    const label = document.createElement('div');
-    label.className = 'continuation-label';
-    const originalLabel = section.querySelector('.section-label');
-    const eyebrow = section.querySelector('.eyebrow');
-    label.textContent = originalLabel ? [...originalLabel.children].map(e => e.textContent.trim()).join(' / ') : (eyebrow?.textContent.trim() || 'DEMIAND / SMARTCOOK SERIES');
-    if (section.matches('footer')) label.textContent = originalLabel.firstElementChild.textContent + ' / ' + section.querySelector('.form-head span').textContent;
-    continuation.append(label);
-    continuation.hidden = true;
-    section.after(continuation);
-    records.push({ section, content, marker, continuation });
-  }
-
   // Compact rails preserve every card and give keyboard users explicit controls.
-  document.querySelectorAll('.products,.four-cards,.benefit-grid,.innovation-points,.connected-features,.quality-path,.ip-grid,.world-stage ol,.localization-stack ul').forEach((rail, index) => {
+  document.querySelectorAll('.products,.innovation-points,.connected-features,.ip-grid').forEach((rail, index) => {
     rail.classList.add('adaptive-rail');
     rail.id ||= `detail-rail-${index}`;
     const controls = document.createElement('div');
@@ -58,39 +26,4 @@
     new ResizeObserver(update).observe(rail);
     update();
   });
-  let timer;
-  let lastLayout = '';
-  const layoutSignature = () => [innerWidth, innerHeight, ...records.flatMap(({ section, content }) => [section.offsetHeight, content.offsetWidth, content.offsetHeight])].join(':');
-  function compose() {
-    for (const record of records) {
-      const { section, content, marker, continuation } = record;
-      const controls = content.nextElementSibling?.classList.contains('rail-controls') ? content.nextElementSibling : null;
-      marker.after(content);
-      if (controls) content.after(controls);
-      continuation.hidden = true;
-      section.classList.remove('has-continuation');
-    }
-    for (const { section, content, continuation } of records) {
-      if (section.getBoundingClientRect().height > window.innerHeight + 1) {
-        const controls = content.nextElementSibling?.classList.contains('rail-controls') ? content.nextElementSibling : null;
-        continuation.append(content);
-        if (controls) continuation.append(controls);
-        continuation.hidden = false;
-        section.classList.add('has-continuation');
-      }
-    }
-    document.documentElement.dataset.composed = 'true';
-    document.documentElement.dataset.layoutViewport = `${innerWidth}x${innerHeight}`;
-    lastLayout = layoutSignature();
-  }
-  function scheduleComposition() {
-    if (layoutSignature() === lastLayout || timer) return;
-    timer = requestAnimationFrame(() => { timer = 0; compose(); });
-  }
-  window.addEventListener('resize', scheduleComposition);
-  const layoutObserver = new ResizeObserver(scheduleComposition);
-  records.forEach(({section, content}) => { layoutObserver.observe(section); layoutObserver.observe(content); });
-  window.addEventListener('load', compose);
-  document.fonts.ready.then(compose);
-  compose();
 })();
