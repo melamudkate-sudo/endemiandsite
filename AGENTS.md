@@ -14,5 +14,5 @@ replace old rules instead of stacking override files.
 - `dist/`: generated, never edit.
 
 Run `npm run build` after changes. Test responsive composition, menu keyboard
-behavior and all six launch-kit choices. Do not upload unrelated project sources,
+behavior and all four launch-kit choices. Do not upload unrelated project sources,
 reference screenshots, archives or credentials to this repository.

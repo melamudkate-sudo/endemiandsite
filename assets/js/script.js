@@ -8,21 +8,32 @@
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const finePointer = matchMedia('(pointer: fine)');
 
-  [
-    ['.brand-ready', 'potential'], ['.distributor-value', 'advantages'],
-    ['.numbers', 'demand'], ['.margins', 'commercial'],
-    ['.app-ecosystem', 'smartcook'], ['.compliance', 'compliance'],
-    ['.quality', 'quality'], ['.after-sales', 'after-sales'],
-    ['.world', 'global'], ['.ip', 'ip'], ['.distributor-terms', 'terms']
-  ].forEach(([selector, id]) => { document.querySelector(selector).id ||= id; });
-
+  moreMenu.inert = true;
+  moreMenu.querySelectorAll('.section-menu-grid a').forEach((link, index) => link.style.setProperty('--menu-order', index));
+  function positionMorePointer() {
+    const trigger = moreToggle.getBoundingClientRect();
+    const left = header.getBoundingClientRect().left + moreMenu.offsetLeft;
+    const anchor = Math.max(24, Math.min(moreMenu.offsetWidth - 24, trigger.left + trigger.width / 2 - left));
+    moreMenu.style.setProperty('--menu-anchor', anchor + 'px');
+  }
+  addEventListener('resize', positionMorePointer, { passive:true });
+  document.fonts.ready.then(positionMorePointer);
+  let menuCloseTimer;
+  function setMoreOpen(open) {
+    clearTimeout(menuCloseTimer);
+    const wasOpen = moreMenu.classList.contains('open');
+    moreMenu.classList.toggle('open', open);
+    moreMenu.classList.toggle('closing', !open && wasOpen && !reducedMotion.matches);
+    moreMenu.inert = !open;
+    moreToggle.setAttribute('aria-expanded', String(open));
+    moreMenu.setAttribute('aria-hidden', String(!open));
+    if (!open) menuCloseTimer = setTimeout(() => moreMenu.classList.remove('closing'), reducedMotion.matches ? 0 : 420);
+  }
   function closeMenus() {
     navigation.classList.remove('open');
-    moreMenu.classList.remove('open');
+    setMoreOpen(false);
     menuToggle.setAttribute('aria-expanded', 'false');
     menuToggle.setAttribute('aria-label', 'Open menu');
-    moreToggle.setAttribute('aria-expanded', 'false');
-    moreMenu.setAttribute('aria-hidden', 'true');
   }
   menuToggle.addEventListener('click', () => {
     const open = !navigation.classList.contains('open');
@@ -33,9 +44,8 @@
   });
   moreToggle.addEventListener('click', () => {
     const open = !moreMenu.classList.contains('open');
-    moreMenu.classList.toggle('open', open);
-    moreToggle.setAttribute('aria-expanded', String(open));
-    moreMenu.setAttribute('aria-hidden', String(!open));
+    positionMorePointer();
+    setMoreOpen(open);
   });
   moreMenu.querySelector('button').addEventListener('click', () => { closeMenus(); moreToggle.focus(); });
   header.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenus));
@@ -72,19 +82,38 @@
 
   const launchChoices = [...document.querySelectorAll('.launch-choice')];
   const launchFrames = [...document.querySelectorAll('.launch-frame')];
-  function selectLaunch(choice) {
+  function selectLaunch(choice, animate = true) {
+    const before = launchFrames.map(frame => frame.getBoundingClientRect());
+    launchFrames.forEach(frame => frame.getAnimations().forEach(animation => animation.cancel()));
     launchChoices.forEach(item => item.setAttribute('aria-pressed', String(item === choice)));
-    const selected = choice?.dataset.preview || 'brand';
+    const selected = choice.dataset.preview;
     let slot = 1;
     launchFrames.forEach(frame => {
-      frame.dataset.slot = frame.dataset.preview === selected ? '0' : String(slot++);
-      frame.classList.toggle('is-dominant', frame.dataset.preview === selected);
-      frame.style.order = frame.dataset.preview === selected ? '-1' : '';
+      const dominant = frame.dataset.preview === selected;
+      frame.dataset.slot = dominant ? '0' : String(slot++);
+      frame.classList.toggle('is-dominant', dominant);
+      frame.style.order = dominant ? '-1' : '';
     });
-    document.querySelector('.launch-status').textContent = choice ? choice.querySelector('strong').textContent + ' preview selected' : 'Launch kit overview';
+    if (animate && !reducedMotion.matches) launchFrames.forEach((frame, i) => {
+      const after = frame.getBoundingClientRect();
+      frame.animate([
+        { transform: `translate(${before[i].left - after.left}px,${before[i].top - after.top}px) scale(${before[i].width / after.width},${before[i].height / after.height})`, opacity:.7 },
+        { transform:'none', opacity:1 }
+      ], { duration:650, easing:'cubic-bezier(.22,.7,.2,1)' });
+    });
+    document.querySelector('.launch-status').textContent = choice.querySelector('strong').textContent + ' preview selected';
   }
-  launchChoices.forEach(choice => choice.addEventListener('click', () => selectLaunch(choice.getAttribute('aria-pressed') === 'true' ? null : choice)));
-  document.querySelector('.launch-reset').addEventListener('click', () => selectLaunch(null));
+  launchChoices.forEach((choice, index) => {
+    choice.addEventListener('click', () => selectLaunch(choice));
+    choice.addEventListener('keydown', event => {
+      const offset = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+      if (!offset) return;
+      event.preventDefault();
+      const next = launchChoices[(index + offset + launchChoices.length) % launchChoices.length];
+      next.focus(); selectLaunch(next);
+    });
+  });
+  selectLaunch(launchChoices[0], false);
 
   const partnerTerms = [...document.querySelectorAll('.terms-accordion details')];
   partnerTerms.forEach(detail => detail.querySelector('summary').addEventListener('click', event => {
@@ -93,18 +122,115 @@
     partnerTerms.forEach(item => { item.open = item === detail && expand; });
   }));
 
+  // Scroll-triggered surfaces: exactly two mechanics, with no layout animation.
+  const sections = [...document.querySelectorAll('.viewport-section')];
+  const sectionBackgrounds = sections.map(section => {
+    const style = getComputedStyle(section);
+    return style.backgroundImage === 'none' && style.backgroundColor === 'rgba(0, 0, 0, 0)'
+      ? getComputedStyle(document.body).background : style.background;
+  });
+  const chapterStates = new Map(sections.filter(section => section.dataset.transition).map(section => [section, 'pending']));
+  const activeChapters = new Map();
+  const contentAllowed = node => {
+    const state = chapterStates.get(node.closest('.viewport-section'));
+    return !state || state === 'content' || state === 'complete';
+  };
+  function revealChapterContent(section) {
+    chapterStates.set(section, 'content');
+    section.querySelectorAll('.reveal').forEach(node => {
+      const rect = node.getBoundingClientRect();
+      if (rect.top < innerHeight && rect.bottom > 0) node.classList.add('visible');
+    });
+  }
+  function enterChapter(section) {
+    if (chapterStates.get(section) !== 'pending') return;
+    const rect = section.getBoundingClientRect();
+    // Direct anchor navigation and fast scrolling always show the destination immediately.
+    if (reducedMotion.matches || rect.top < innerHeight * .4) {
+      revealChapterContent(section);
+      chapterStates.set(section, 'complete');
+      return;
+    }
+    chapterStates.set(section, 'surface');
+    const index = sections.indexOf(section);
+    const layered = section.dataset.transition === 'layered';
+    const previous = sections[index - 1];
+    const surface = document.createElement('div');
+    surface.className = 'chapter-surface';
+    surface.setAttribute('aria-hidden', 'true');
+    surface.style.background = sectionBackgrounds[index];
+    const originalBackground = section.style.background;
+    section.style.background = sectionBackgrounds[index - 1];
+    const content = [...section.children];
+    section.prepend(surface);
+    const radius = getComputedStyle(section).borderTopLeftRadius;
+    const duration = layered ? 1050 : 900;
+    const contentDelay = layered ? 430 : 700;
+    const easing = 'cubic-bezier(.22,.7,.2,1)';
+    const animations = [];
+    animations.push(surface.animate(layered ? [
+      { transform:`translateY(28px) scaleY(${(rect.height - 28) / rect.height})`, clipPath:`inset(5% 0 0 round ${radius} ${radius} 0 0)`, opacity:.35 },
+      { transform:'none', clipPath:`inset(0 round ${radius} ${radius} 0 0)`, opacity:1 }
+    ] : [
+      { clipPath:'inset(100% 0 0)' },
+      { clipPath:'inset(0)' }
+    ], { duration, easing, fill:'both' }));
+    let depth;
+    if (layered && previous) {
+      depth = document.createElement('div');
+      depth.className = 'chapter-depth';
+      depth.setAttribute('aria-hidden', 'true');
+      previous.append(depth);
+      animations.push(depth.animate([{opacity:0},{opacity:.08,offset:.5},{opacity:0}], {duration:1200,easing,fill:'both'}));
+    }
+    content.forEach((node, i) => {
+      if (getComputedStyle(node).display === 'contents') return;
+      animations.push(node.animate([
+        {opacity:0,transform:'translateY(12px)'},
+        {opacity:1,transform:'none'}
+      ], {duration:480,delay:contentDelay + Math.min(i * 35,140),easing,fill:'backwards'}));
+    });
+    const contentTimer = setTimeout(() => revealChapterContent(section), contentDelay);
+    let finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      clearTimeout(contentTimer);
+      animations.forEach(animation => animation.cancel());
+      surface.remove(); depth?.remove();
+      section.style.background = originalBackground;
+      revealChapterContent(section);
+      chapterStates.set(section, 'complete');
+      activeChapters.delete(section);
+    }
+    activeChapters.set(section, finish);
+    Promise.all(animations.map(animation => animation.finished)).then(finish).catch(() => {});
+  }
+  const chapterObserver = new IntersectionObserver(entries => {
+    entries.forEach(({target, isIntersecting}) => {
+      if (!isIntersecting) return;
+      enterChapter(target);
+      chapterObserver.unobserve(target);
+    });
+  }, {rootMargin:'0px 0px 100px 0px',threshold:0});
+  chapterStates.forEach((_, section) => chapterObserver.observe(section));
+  reducedMotion.addEventListener('change', () => {
+    if (reducedMotion.matches) activeChapters.forEach(finish => finish());
+  });
+
+  document.querySelectorAll('.localization-badges li').forEach((node, i) => node.style.setProperty('--order', i));
   document.querySelectorAll('.innovation-photo-frame').forEach(node => node.classList.add('reveal'));
   const revealObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
+      if (!entry.isIntersecting || !contentAllowed(entry.target)) return;
       entry.target.classList.add('visible');
       revealObserver.unobserve(entry.target);
     });
   }, { threshold: .06, rootMargin: '0px 0px -3% 0px' });
   document.querySelectorAll('.reveal').forEach(node => revealObserver.observe(node));
-  document.querySelectorAll('.products,.benefit-grid,.innovation-points,.ip-grid,.connected-features,.quality-contact,.support-backbone').forEach(group => {
+  document.querySelectorAll('.products,.benefit-grid,.innovation-points,.ip-grid,.connected-features,.quality-contact,.commerce-route,.manufacturing-metrics').forEach(group => {
     [...group.children].forEach((node, index) => {
-      node.style.transitionDelay = Math.min(index * 75, 225) + 'ms';
+      node.style.transitionDelay = Math.min(index * 110, 330) + 'ms';
     });
   });
   const counterObserver = new IntersectionObserver(entries => {
@@ -130,10 +256,13 @@
   let scrollQueued = false;
   function updateScroll() {
     scrollQueued = false;
+    activeChapters.forEach((finish, section) => {
+      if (section.getBoundingClientRect().top < innerHeight * .35) finish();
+    });
     header.classList.toggle('scrolled', scrollY > 24);
     document.querySelectorAll('.reveal:not(.visible)').forEach(node => {
       const rect = node.getBoundingClientRect();
-      if (rect.top < innerHeight * .97 && rect.bottom > 0 && rect.left < innerWidth && rect.right > 0) node.classList.add('visible');
+      if (contentAllowed(node) && rect.top < innerHeight * .97 && rect.bottom > 0 && rect.left < innerWidth && rect.right > 0) node.classList.add('visible');
     });
     photographs.forEach(photo => {
       const rect = photo.parentElement.getBoundingClientRect();
