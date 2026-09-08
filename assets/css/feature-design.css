@@ -211,7 +211,7 @@
   display: block;
   font-size: 12px;
   letter-spacing: .12em;
-  color: #c8b185;
+  color: #b8bfca;
   margin-bottom: 12px;
 }
 .connected-value h3 {
@@ -282,7 +282,7 @@
   border-top: 1px solid #ffffff38;
 }
 .connected-features article > span {
-  color: #c8b185;
+  color: #b8bfca;
   font-size: 13px;
   padding-top: 3px;
 }
@@ -384,7 +384,7 @@
 .hero-footer {
     padding-top: 18px;
   }
-.hero-footer > p:not(.mono), .hero-footer .scroll-cue {
+.hero-footer .scroll-cue {
     display: none;
   }
 .hero-trust {

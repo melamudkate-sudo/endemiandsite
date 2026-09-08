@@ -871,7 +871,7 @@ html {
 .placeholder-label { padding:30px; font:500 12px/1.8 var(--sans); letter-spacing:.11em; text-align:center; text-transform:uppercase; }
 .media-placeholder>img, .media-placeholder>video { width:100%; height:100%; object-fit:cover; }
 .glass-label { display:inline-flex; padding:10px 16px; border:1px solid #ffffff99; border-radius:100px; background:#ffffff70; backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); box-shadow:inset 0 1px 0 #fff9,0 6px 22px #17182008; font-size:12px; letter-spacing:.06em; }
-.metallic, .connected-value small, .connected-features article > span { background:linear-gradient(132deg,#786039 0%,#b59a60 19%,#f2e1b4 37%,#fff1ce 43%,#bba16d 57%,#907444 75%,#dac593 100%); background-clip:text; -webkit-background-clip:text; color:transparent; -webkit-text-fill-color:transparent; }
+.metallic { background:linear-gradient(132deg,#786039 0%,#b59a60 19%,#f2e1b4 37%,#fff1ce 43%,#bba16d 57%,#907444 75%,#dac593 100%); background-clip:text; -webkit-background-clip:text; color:transparent; -webkit-text-fill-color:transparent; }
 @media(prefers-reduced-motion:reduce) {
 html { scroll-behavior:auto; }
 *, *::before, *::after { animation:none!important; transition:none!important; }
@@ -907,7 +907,7 @@ html { scroll-behavior:auto; }
 .manufacturing .section-label, .manufacturing .split-heading>p { color:#b9bdc5; }
 .manufacturing h2 em { color:white; }
 .manufacturing-layout { display:grid; gap:24px; }
-.production-film { position:relative; width:min(100%,calc((100dvh - 500px)*16/9)); margin:0 auto; overflow:hidden; border-radius:8px; }
+.production-film { position:relative; width:min(100%,calc(43dvh * 16 / 9)); margin:0 auto; overflow:hidden; border-radius:8px; }
 .production-video { width:100%; aspect-ratio:16/9; flex-direction:column; gap:24px; background:linear-gradient(145deg,#686c71,#41454a 58%,#62666a); border-color:#ffffff28; color:#fff; border-radius:8px; }
 .production-video::before, .production-video::after { border-color:#ffffff55; }
 .production-video .placeholder-label { padding:0; font-size:14px; letter-spacing:.2em; }

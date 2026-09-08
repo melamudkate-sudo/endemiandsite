@@ -10,12 +10,6 @@
 .terms-introduction h2 {
   font-size: clamp(38px,4.2vw,66px);
 }
-.terms-introduction > p {
-  font-size: 17px;
-  line-height: 1.6;
-  margin-top: 24px;
-  max-width: 510px;
-}
 .terms-assurance {
   margin-top: 32px;
   padding-left: 24px;
@@ -113,10 +107,6 @@
 .terms-introduction h2 {
     font-size: 42px;
   }
-.terms-introduction > p {
-    font-size: 16px;
-    margin-top: 20px;
-  }
 .terms-assurance {
     margin-top: 26px;
     padding-left: 20px;
@@ -179,9 +169,6 @@
   }
 .terms-introduction h2 {
     font-size: 30px;
-  }
-.terms-introduction > p {
-    font-size: 14px;
   }
 .terms-assurance {
     margin-top: 20px;
@@ -255,7 +242,7 @@
   margin-bottom: 12px;
 }
 .card-content p {
-  font-size: 17px;
+  font-size: 18px;
   line-height: 1.5;
   max-width: 360px;
 }
@@ -504,4 +491,4 @@
 @media(max-width:550px) { .quality-contact { grid-template-columns:1fr; } .quality-frame:first-child { grid-column:auto; } }
 
 
-.terms-assurance>p { font-size:16px; margin-top:12px; }
+
