@@ -1,3 +1,9 @@
+/* CSS is the single source of timing values for native and scripted motion. */
+const demiandMotion = (() => {
+  const styles = getComputedStyle(document.documentElement);
+  const read = name => parseFloat(styles.getPropertyValue('--motion-' + name));
+  return Object.freeze({ micro:read('micro'), state:read('state'), chapter:read('chapter'), stagger:read('stagger'), ease:styles.getPropertyValue('--ease').trim() });
+})();
 /* DEMIAND / navigation, motion and contact interactions. */
 (() => {
   const header = document.querySelector('.nav');
@@ -27,7 +33,7 @@
     moreMenu.inert = !open;
     moreToggle.setAttribute('aria-expanded', String(open));
     moreMenu.setAttribute('aria-hidden', String(!open));
-    if (!open) menuCloseTimer = setTimeout(() => moreMenu.classList.remove('closing'), reducedMotion.matches ? 0 : 420);
+    if (!open) menuCloseTimer = setTimeout(() => moreMenu.classList.remove('closing'), reducedMotion.matches ? 0 : demiandMotion.state);
   }
   function closeMenus() {
     navigation.classList.remove('open');
@@ -95,7 +101,7 @@
       const animation = item.querySelector('p').animate([
         { opacity:1, transform:'none', clipPath:'inset(0)' },
         { opacity:0, transform:'translateY(-5px)', clipPath:'inset(0 0 100%)' }
-      ], { duration:180, easing:'ease-out' });
+      ], { duration:demiandMotion.state, easing:demiandMotion.ease });
       closingTerms.set(item, animation);
       animation.finished.then(() => {
         if (closingTerms.get(item) !== animation) return;
@@ -136,41 +142,30 @@
     chapterStates.set(section, 'surface');
     const index = sections.indexOf(section);
     const layered = section.dataset.transition === 'layered';
-    const previous = sections[index - 1];
     const surface = document.createElement('div');
     surface.className = 'chapter-surface';
     surface.setAttribute('aria-hidden', 'true');
-    surface.style.background = sectionBackgrounds[index];
-    const originalBackground = section.style.background;
-    section.style.background = sectionBackgrounds[index - 1];
+    surface.style.background = layered ? sectionBackgrounds[index] : sectionBackgrounds[index - 1];
     const content = [...section.children];
     section.prepend(surface);
     const radius = getComputedStyle(section).borderTopLeftRadius;
-    const duration = layered ? 1050 : 900;
-    const contentDelay = layered ? 430 : 700;
-    const easing = 'cubic-bezier(.22,.7,.2,1)';
+    const duration = demiandMotion.chapter;
+    const contentDelay = demiandMotion.micro;
+    const easing = demiandMotion.ease;
     const animations = [];
     animations.push(surface.animate(layered ? [
       { transform:`translateY(28px) scaleY(${(rect.height - 28) / rect.height})`, clipPath:`inset(5% 0 0 round ${radius} ${radius} 0 0)`, opacity:.35 },
       { transform:'none', clipPath:`inset(0 round ${radius} ${radius} 0 0)`, opacity:1 }
     ] : [
-      { clipPath:'inset(100% 0 0)' },
-      { clipPath:'inset(0)' }
+      { clipPath:'inset(0)' },
+      { clipPath:'inset(0 0 100%)' }
     ], { duration, easing, fill:'both' }));
-    let depth;
-    if (layered && previous) {
-      depth = document.createElement('div');
-      depth.className = 'chapter-depth';
-      depth.setAttribute('aria-hidden', 'true');
-      previous.append(depth);
-      animations.push(depth.animate([{opacity:0},{opacity:.08,offset:.5},{opacity:0}], {duration:1200,easing,fill:'both'}));
-    }
     content.forEach((node, i) => {
       if (getComputedStyle(node).display === 'contents') return;
       animations.push(node.animate([
         {opacity:0,transform:'translateY(12px)'},
         {opacity:1,transform:'none'}
-      ], {duration:480,delay:contentDelay + Math.min(i * 35,140),easing,fill:'backwards'}));
+      ], {duration:demiandMotion.state,delay:contentDelay + Math.min(i * 20,60),easing,fill:'backwards'}));
     });
     const contentTimer = setTimeout(() => revealChapterContent(section), contentDelay);
     let finished = false;
@@ -179,8 +174,7 @@
       finished = true;
       clearTimeout(contentTimer);
       animations.forEach(animation => animation.cancel());
-      surface.remove(); depth?.remove();
-      section.style.background = originalBackground;
+      surface.remove();
       revealChapterContent(section);
       chapterStates.set(section, 'complete');
       activeChapters.delete(section);
@@ -210,7 +204,7 @@
   document.querySelectorAll('.reveal').forEach(node => revealObserver.observe(node));
   document.querySelectorAll('.products,.benefit-grid,.connected-features,.manufacturing-metrics').forEach(group => {
     [...group.children].forEach((node, index) => {
-      node.style.transitionDelay = Math.min(index * 110, 330) + 'ms';
+      node.style.transitionDelay = Math.min(index * demiandMotion.stagger, demiandMotion.stagger * 3) + 'ms';
     });
   });
   const counterObserver = new IntersectionObserver(entries => {
@@ -222,7 +216,7 @@
       const decimals = Number(target.dataset.decimals || 0);
       const start = performance.now();
       const tick = now => {
-        const progress = Math.min((now - start) / 1350, 1);
+        const progress = Math.min((now - start) / demiandMotion.chapter, 1);
         target.textContent = (end * (1 - Math.pow(1 - progress, 4))).toFixed(decimals);
         if (progress < 1 && !reducedMotion.matches) requestAnimationFrame(tick);
         else target.textContent = end.toFixed(decimals);
@@ -314,12 +308,12 @@
   const next = section.querySelector('.catalog-next');
   const progress = section.querySelector('.catalog-progress');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  const easing = 'cubic-bezier(.22,.7,.2,1)';
+  const easing = demiandMotion.ease;
   let selected, busy = false, active = 0;
   const pad = number => String(number).padStart(2, '0');
   function animate(element, frames, options = {}) {
     if (reducedMotion.matches) return Promise.resolve();
-    return element.animate(frames, { duration: 650, easing, ...options }).finished.catch(() => {});
+    return element.animate(frames, { duration: demiandMotion.state, easing, ...options }).finished.catch(() => {});
   }
   function showImage(frame, src, alt) {
     frame.replaceChildren();
@@ -331,6 +325,7 @@
     }
   }
   function render(data) {
+    rail.style.setProperty('--model-columns', Math.min(3.5, data.models.length));
     rail.replaceChildren();
     data.models.forEach((model, index) => {
       const card = document.createElement('article'); card.className = 'catalog-card';
@@ -346,7 +341,7 @@
         button.addEventListener('click', () => {
           swatches.querySelectorAll('button').forEach(node => node.setAttribute('aria-pressed', String(node === button)));
           showImage(frame, color.image || model.image, `${model.name}: ${color.label}`);
-          animate(frame, [{ opacity: .4 }, { opacity: 1 }], { duration: 300 });
+          animate(frame, [{ opacity: .4 }, { opacity: 1 }], { duration: demiandMotion.micro });
         });
         swatches.append(button);
       });
@@ -376,20 +371,26 @@
     title.textContent = data.title; count.textContent = `${pad(data.models.length)} MODELS`;
     anchor.replaceChildren(source.cloneNode());
     render(data);
-    await Promise.all([...categories.children].filter(card => card !== button).map(card => animate(card, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(18px) scale(.96)' }], { duration: 240 })));
+    if (!reducedMotion.matches) {
+      const outgoing = categories.cloneNode(true);
+      outgoing.classList.add('catalog-outgoing'); outgoing.inert = true;
+      outgoing.setAttribute('aria-hidden', 'true');
+      outgoing.querySelector(`[data-category="${button.dataset.category}"]`).style.visibility = 'hidden';
+      section.querySelector('.portfolio-stage').append(outgoing);
+      animate(outgoing, [{opacity:1, transform:'none'}, {opacity:0, transform:'translateY(10px) scale(.985)'}], {duration:demiandMotion.micro}).then(() => outgoing.remove());
+    }
     categories.hidden = true; categoryHeading.hidden = true; heading.hidden = false; view.hidden = false;
     section.classList.add('catalog-open'); rail.scrollLeft = 0; update();
     const image = anchor.firstElementChild; const to = image.getBoundingClientRect();
-    const shared = animate(image, [{ transform: `translate(${from.left - to.left}px,${from.top - to.top}px) scale(${from.width / to.width},${from.height / to.height})` }, { transform: 'none' }], { duration: 700 });
-    const cards = [...rail.children].map((card, i) => animate(card, [{ opacity: 0, transform: 'translateY(28px) scale(.97)', clipPath: 'inset(0 0 100% round 16px)' }, { opacity: 1, transform: 'none', clipPath: 'inset(0 round 16px)' }], { delay: 130 + Math.min(i, 3) * 75, fill: 'backwards' }));
+    const shared = animate(image, [{ transform: `translate(${from.left - to.left}px,${from.top - to.top}px) scale(${from.width / to.width},${from.height / to.height})` }, { transform: 'none' }], { duration: demiandMotion.state });
+    const cards = [...rail.children].map((card, i) => animate(card, [{ opacity: 0, transform: 'translateY(28px) scale(.97)', clipPath: 'inset(0 0 100% round 16px)' }, { opacity: 1, transform: 'none', clipPath: 'inset(0 round 16px)' }], { delay: Math.min(i, 2) * demiandMotion.stagger, fill: 'backwards' }));
     await Promise.all([shared, ...cards]); busy = false; title.focus({ preventScroll: true });
   }
   async function close() {
     if (busy) return; busy = true;
-    await animate(view, [{ opacity: 1 }, { opacity: 0, transform: 'translateY(12px)' }], { duration: 220 });
     view.hidden = true; heading.hidden = true; categories.hidden = false; categoryHeading.hidden = false; section.classList.remove('catalog-open');
     categories.querySelectorAll('.reveal').forEach(card => card.classList.add('visible'));
-    await Promise.all([...categories.children].map((card, i) => animate(card, [{ opacity: 0, transform: 'translateY(18px) scale(.97)' }, { opacity: 1, transform: 'none' }], { delay: i * 55, fill: 'backwards' })));
+    await Promise.all([...categories.children].map((card, i) => animate(card, [{ opacity: 0, transform: 'translateY(18px) scale(.97)' }, { opacity: 1, transform: 'none' }], { delay: i * demiandMotion.stagger, fill: 'backwards' })));
     busy = false; selected.focus({ preventScroll: true });
   }
   categories.querySelectorAll('[data-category]').forEach(button => button.addEventListener('click', () => open(button)));
