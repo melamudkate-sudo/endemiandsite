@@ -80,46 +80,28 @@
     });
   });
 
-  const launchChoices = [...document.querySelectorAll('.launch-choice')];
-  const launchFrames = [...document.querySelectorAll('.launch-frame')];
-  function selectLaunch(choice, animate = true) {
-    const before = launchFrames.map(frame => frame.getBoundingClientRect());
-    launchFrames.forEach(frame => frame.getAnimations().forEach(animation => animation.cancel()));
-    launchChoices.forEach(item => item.setAttribute('aria-pressed', String(item === choice)));
-    const selected = choice.dataset.preview;
-    let slot = 1;
-    launchFrames.forEach(frame => {
-      const dominant = frame.dataset.preview === selected;
-      frame.dataset.slot = dominant ? '0' : String(slot++);
-      frame.classList.toggle('is-dominant', dominant);
-      frame.style.order = dominant ? '-1' : '';
-    });
-    if (animate && !reducedMotion.matches) launchFrames.forEach((frame, i) => {
-      const after = frame.getBoundingClientRect();
-      frame.animate([
-        { transform: `translate(${before[i].left - after.left}px,${before[i].top - after.top}px) scale(${before[i].width / after.width},${before[i].height / after.height})`, opacity:.7 },
-        { transform:'none', opacity:1 }
-      ], { duration:650, easing:'cubic-bezier(.22,.7,.2,1)' });
-    });
-    document.querySelector('.launch-status').textContent = choice.querySelector('strong').textContent + ' preview selected';
-  }
-  launchChoices.forEach((choice, index) => {
-    choice.addEventListener('click', () => selectLaunch(choice));
-    choice.addEventListener('keydown', event => {
-      const offset = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
-      if (!offset) return;
-      event.preventDefault();
-      const next = launchChoices[(index + offset + launchChoices.length) % launchChoices.length];
-      next.focus(); selectLaunch(next);
-    });
-  });
-  selectLaunch(launchChoices[0], false);
-
   const partnerTerms = [...document.querySelectorAll('.terms-accordion details')];
+  let selectedTerm = partnerTerms.find(detail => detail.open);
+  const closingTerms = new Map();
   partnerTerms.forEach(detail => detail.querySelector('summary').addEventListener('click', event => {
     event.preventDefault();
-    const expand = !detail.open;
-    partnerTerms.forEach(item => { item.open = item === detail && expand; });
+    selectedTerm = selectedTerm === detail ? null : detail;
+    partnerTerms.forEach(item => {
+      closingTerms.get(item)?.cancel();
+      closingTerms.delete(item);
+      if (item === selectedTerm) { item.open = true; return; }
+      if (!item.open) return;
+      if (reducedMotion.matches) { item.open = false; return; }
+      const animation = item.querySelector('p').animate([
+        { opacity:1, transform:'none', clipPath:'inset(0)' },
+        { opacity:0, transform:'translateY(-5px)', clipPath:'inset(0 0 100%)' }
+      ], { duration:180, easing:'ease-out' });
+      closingTerms.set(item, animation);
+      animation.finished.then(() => {
+        if (closingTerms.get(item) !== animation) return;
+        item.open = false; closingTerms.delete(item);
+      }).catch(() => {});
+    });
   }));
 
   // Scroll-triggered surfaces: exactly two mechanics, with no layout animation.
@@ -218,8 +200,6 @@
     if (reducedMotion.matches) activeChapters.forEach(finish => finish());
   });
 
-  document.querySelectorAll('.localization-badges li').forEach((node, i) => node.style.setProperty('--order', i));
-  document.querySelectorAll('.innovation-photo-frame').forEach(node => node.classList.add('reveal'));
   const revealObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (!entry.isIntersecting || !contentAllowed(entry.target)) return;
@@ -228,7 +208,7 @@
     });
   }, { threshold: .06, rootMargin: '0px 0px -3% 0px' });
   document.querySelectorAll('.reveal').forEach(node => revealObserver.observe(node));
-  document.querySelectorAll('.products,.benefit-grid,.innovation-points,.ip-grid,.connected-features,.quality-contact,.commerce-route,.manufacturing-metrics').forEach(group => {
+  document.querySelectorAll('.products,.benefit-grid,.connected-features,.manufacturing-metrics').forEach(group => {
     [...group.children].forEach((node, index) => {
       node.style.transitionDelay = Math.min(index * 110, 330) + 'ms';
     });
@@ -252,7 +232,6 @@
   }, {threshold:.8});
   document.querySelectorAll('[data-count]').forEach(node => counterObserver.observe(node));
 
-  const photographs = [...document.querySelectorAll('.innovation-photo-frame img')];
   let scrollQueued = false;
   function updateScroll() {
     scrollQueued = false;
@@ -264,12 +243,7 @@
       const rect = node.getBoundingClientRect();
       if (contentAllowed(node) && rect.top < innerHeight * .97 && rect.bottom > 0 && rect.left < innerWidth && rect.right > 0) node.classList.add('visible');
     });
-    photographs.forEach(photo => {
-      const rect = photo.parentElement.getBoundingClientRect();
-      if (rect.bottom < 0 || rect.top > innerHeight) return;
-      const shift = reducedMotion.matches ? 0 : Math.max(-8, Math.min(8, (rect.top + rect.height / 2 - innerHeight / 2) * .025));
-      photo.style.setProperty('--image-shift', shift.toFixed(2) + 'px');
-    });
+
   }
   addEventListener('scroll', () => {
     if (!scrollQueued) { scrollQueued = true; requestAnimationFrame(updateScroll); }
@@ -300,11 +274,7 @@
   });
 
   const form = document.querySelector('.partner-form');
-  const partnerEmail = document.querySelector('.contact-channels button span').textContent.trim();
-  const subjects = ['International distribution partnership', 'Request WhatsApp / WeChat contact', 'Book a B2B introduction'];
-  document.querySelectorAll('.contact-channels button').forEach((button, index) => {
-    button.addEventListener('click', () => { location.href = 'mailto:' + partnerEmail + '?subject=' + encodeURIComponent(subjects[index]); });
-  });
+  const partnerEmail = form.dataset.email;
   form.querySelectorAll('input, select').forEach(field => { field.required = true; });
   form.querySelector('.form-submit small').textContent = 'Prepare an email request. Nothing is sent automatically.';
   form.addEventListener('submit', event => {
@@ -312,11 +282,144 @@
     if (!form.reportValidity()) return;
     const data = new FormData(form);
     const body = ['International distribution enquiry', '', 'Business email: ' + data.get('email'), 'Company: ' + data.get('company'), 'Country / market: ' + data.get('market'), 'Product categories: ' + data.get('category'), '', 'Please share wholesale pricing, MOQ, lead times and distributor terms.'].join('\n');
-    const link = document.createElement('a');
-    link.href = 'mailto:' + partnerEmail + '?subject=' + encodeURIComponent('DEMIAND distribution enquiry — ' + data.get('company')) + '&body=' + encodeURIComponent(body);
-    link.textContent = 'Open your email request ↗';
-    const status = form.querySelector('.form-status');
-    status.replaceChildren(link);
-    form.querySelector('.form-submit small')?.replaceWith(status);
+    const request = 'mailto:' + partnerEmail + '?subject=' + encodeURIComponent('DEMIAND distribution enquiry — ' + data.get('company')) + '&body=' + encodeURIComponent(body);
+    location.href = request;
+    form.querySelector('.form-status').textContent = 'Email request prepared. Review and send it in your email app.';
   });
+})();
+
+/* Catalog data: neutral demo swatches only. Replace labels, swatches and images here. */
+(() => {
+  const demoColors = ['#dedfe2', '#474a51', '#b7bbc3', '#8c929d'].map((swatch, i) => ({ label: `Placeholder color ${i + 1}`, swatch, image: null }));
+  const models = (counts, singular) => counts.map((count, i) => ({
+    name: `${singular} / MODEL ${String(i + 1).padStart(2, '0')}`,
+    colors: demoColors.slice(0, count).map(color => ({ ...color })), image: null
+  }));
+  const catalog = {
+    'air-fryers': { title: 'AIR FRYERS', models: models([3, 3, 3, 2, 2, 2, 2], 'AIR FRYER') },
+    'coffee-makers': { title: 'COFFEE MAKERS', models: models([3, 2, 1], 'COFFEE MAKER') },
+    blenders: { title: 'BLENDERS', models: models([2, 4], 'BLENDER') }
+  };
+  const section = document.getElementById('portfolio');
+  const categories = section.querySelector('.products');
+  const categoryHeading = section.querySelector('.category-heading');
+  const heading = section.querySelector('.catalog-heading');
+  const view = section.querySelector('.catalog-view');
+  const rail = section.querySelector('.catalog-rail');
+  const title = section.querySelector('#catalog-title');
+  const count = section.querySelector('#catalog-count');
+  const anchor = section.querySelector('.catalog-anchor');
+  const back = section.querySelector('.catalog-back');
+  const prev = section.querySelector('.catalog-prev');
+  const next = section.querySelector('.catalog-next');
+  const progress = section.querySelector('.catalog-progress');
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const easing = 'cubic-bezier(.22,.7,.2,1)';
+  let selected, busy = false, active = 0;
+  const pad = number => String(number).padStart(2, '0');
+  function animate(element, frames, options = {}) {
+    if (reducedMotion.matches) return Promise.resolve();
+    return element.animate(frames, { duration: 650, easing, ...options }).finished.catch(() => {});
+  }
+  function showImage(frame, src, alt) {
+    frame.replaceChildren();
+    if (src) {
+      const image = new Image(); image.src = src; image.alt = alt; image.draggable = false;
+      frame.append(image);
+    } else {
+      const label = document.createElement('span'); label.className = 'placeholder-label'; label.textContent = 'PRODUCT IMAGE / PLACEHOLDER'; frame.append(label);
+    }
+  }
+  function render(data) {
+    rail.replaceChildren();
+    data.models.forEach((model, index) => {
+      const card = document.createElement('article'); card.className = 'catalog-card';
+      card.setAttribute('aria-label', `${model.name}, ${model.colors.length} placeholder colors`);
+      const frame = document.createElement('div'); frame.className = 'catalog-image media-placeholder';
+      showImage(frame, model.image, model.name);
+      const name = document.createElement('h3'); name.textContent = model.name;
+      const swatches = document.createElement('div'); swatches.className = 'catalog-swatches'; swatches.setAttribute('role', 'group'); swatches.setAttribute('aria-label', `${model.name}: illustrative color options`);
+      model.colors.forEach((color, i) => {
+        const button = document.createElement('button'); button.type = 'button'; button.style.setProperty('--swatch', color.swatch);
+        button.setAttribute('aria-label', `${model.name}: ${color.label}`); button.title = color.label;
+        button.setAttribute('aria-pressed', String(i === 0));
+        button.addEventListener('click', () => {
+          swatches.querySelectorAll('button').forEach(node => node.setAttribute('aria-pressed', String(node === button)));
+          showImage(frame, color.image || model.image, `${model.name}: ${color.label}`);
+          animate(frame, [{ opacity: .4 }, { opacity: 1 }], { duration: 300 });
+        });
+        swatches.append(button);
+      });
+      card.append(frame, name, swatches); card.style.setProperty('--card', index); rail.append(card);
+    });
+  }
+  function update() {
+    if (view.hidden) return;
+    const max = rail.scrollWidth - rail.clientWidth;
+    const start = rail.getBoundingClientRect().left;
+    const cards = [...rail.children];
+    // At the end of the rail, the final model becomes the progress anchor.
+    active = max > 2 && rail.scrollLeft >= max - 2 ? cards.length - 1 : cards.reduce((best, card, i) => Math.abs(card.getBoundingClientRect().left - start) < Math.abs(cards[best].getBoundingClientRect().left - start) ? i : best, 0);
+    progress.textContent = `${pad(active + 1)} / ${pad(cards.length)}`;
+    prev.disabled = rail.scrollLeft <= 2; next.disabled = rail.scrollLeft >= max - 2;
+    section.querySelector('.catalog-track i').style.width = `${max > 2 ? 100 * (active + 1) / cards.length : 100}%`;
+  }
+  function move(direction) {
+    const step = rail.firstElementChild.getBoundingClientRect().width + parseFloat(getComputedStyle(rail).gap);
+    rail.scrollBy({ left: direction * step, behavior: reducedMotion.matches ? 'instant' : 'smooth' });
+  }
+  async function open(button) {
+    if (busy) return; busy = true; selected = button;
+    const source = button.querySelector('img');
+    const from = source.getBoundingClientRect();
+    const data = catalog[button.dataset.category];
+    title.textContent = data.title; count.textContent = `${pad(data.models.length)} MODELS`;
+    anchor.replaceChildren(source.cloneNode());
+    render(data);
+    await Promise.all([...categories.children].filter(card => card !== button).map(card => animate(card, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(18px) scale(.96)' }], { duration: 240 })));
+    categories.hidden = true; categoryHeading.hidden = true; heading.hidden = false; view.hidden = false;
+    section.classList.add('catalog-open'); rail.scrollLeft = 0; update();
+    const image = anchor.firstElementChild; const to = image.getBoundingClientRect();
+    const shared = animate(image, [{ transform: `translate(${from.left - to.left}px,${from.top - to.top}px) scale(${from.width / to.width},${from.height / to.height})` }, { transform: 'none' }], { duration: 700 });
+    const cards = [...rail.children].map((card, i) => animate(card, [{ opacity: 0, transform: 'translateY(28px) scale(.97)', clipPath: 'inset(0 0 100% round 16px)' }, { opacity: 1, transform: 'none', clipPath: 'inset(0 round 16px)' }], { delay: 130 + Math.min(i, 3) * 75, fill: 'backwards' }));
+    await Promise.all([shared, ...cards]); busy = false; title.focus({ preventScroll: true });
+  }
+  async function close() {
+    if (busy) return; busy = true;
+    await animate(view, [{ opacity: 1 }, { opacity: 0, transform: 'translateY(12px)' }], { duration: 220 });
+    view.hidden = true; heading.hidden = true; categories.hidden = false; categoryHeading.hidden = false; section.classList.remove('catalog-open');
+    categories.querySelectorAll('.reveal').forEach(card => card.classList.add('visible'));
+    await Promise.all([...categories.children].map((card, i) => animate(card, [{ opacity: 0, transform: 'translateY(18px) scale(.97)' }, { opacity: 1, transform: 'none' }], { delay: i * 55, fill: 'backwards' })));
+    busy = false; selected.focus({ preventScroll: true });
+  }
+  categories.querySelectorAll('[data-category]').forEach(button => button.addEventListener('click', () => open(button)));
+  back.addEventListener('click', close);
+  prev.addEventListener('click', () => move(-1)); next.addEventListener('click', () => move(1));
+  rail.addEventListener('scroll', update, { passive: true }); new ResizeObserver(update).observe(rail);
+  rail.addEventListener('keydown', event => {
+    if (event.target !== rail) return;
+    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') { event.preventDefault(); move(event.key === 'ArrowRight' ? 1 : -1); }
+    if (event.key === 'Home' || event.key === 'End') { event.preventDefault(); rail.scrollTo({ left: event.key === 'Home' ? 0 : rail.scrollWidth, behavior: reducedMotion.matches ? 'instant' : 'smooth' }); }
+  });
+  section.addEventListener('keydown', event => { if (event.key === 'Escape' && !view.hidden) { event.stopPropagation(); close(); } });
+  rail.addEventListener('wheel', event => {
+    if (event.ctrlKey || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+    const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? rail.clientWidth : 1);
+    const max = rail.scrollWidth - rail.clientWidth;
+    if ((delta > 0 && rail.scrollLeft < max - 2) || (delta < 0 && rail.scrollLeft > 2)) { event.preventDefault(); rail.scrollLeft += delta; }
+  }, { passive: false });
+  let drag = null, suppressClick = false;
+  rail.addEventListener('pointerdown', event => {
+    if (event.pointerType !== 'mouse' || event.button !== 0 || event.target.closest('button')) return;
+    drag = { x: event.clientX, scroll: rail.scrollLeft, id: event.pointerId }; suppressClick = false;
+  });
+  rail.addEventListener('pointermove', event => {
+    if (!drag) return;
+    const delta = event.clientX - drag.x;
+    if (Math.abs(delta) > 5) { suppressClick = true; rail.setPointerCapture(drag.id); rail.classList.add('dragging'); }
+    if (suppressClick) rail.scrollLeft = drag.scroll - delta;
+  });
+  const endDrag = () => { if (!drag) return; if (rail.hasPointerCapture(drag.id)) rail.releasePointerCapture(drag.id); drag = null; rail.classList.remove('dragging'); };
+  window.addEventListener('pointerup', endDrag); rail.addEventListener('pointercancel', endDrag);
+  rail.addEventListener('click', event => { if (suppressClick) { event.preventDefault(); event.stopPropagation(); suppressClick = false; } }, true);
 })();

@@ -1,7 +1,7 @@
 /* Responsive rails preserve keyboard access without splitting sections. */
 (() => {
   // Compact rails preserve every card and give keyboard users explicit controls.
-  document.querySelectorAll('.products,.innovation-points,.connected-features,.ip-grid').forEach((rail, index) => {
+  document.querySelectorAll('.connected-features').forEach((rail, index) => {
     rail.classList.add('adaptive-rail');
     rail.id ||= `detail-rail-${index}`;
     const controls = document.createElement('div');
