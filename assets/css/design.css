@@ -670,7 +670,7 @@ html { scroll-behavior:auto; }
 }
 .distributor-value { background:#121318; color:white; }
 .distributor-value .section-label, .distributor-value .split-heading>p { color:#aeb0ba; }
-.benefit-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:30px; margin-top:30px; }
+.benefit-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:clamp(22px,3dvh,30px); margin-top:30px; }
 .benefit { min-width:0; border-top:1px solid #ffffff30; padding-top:24px; }
 .benefit>b, .benefit>span { display:block; font-size:12px; letter-spacing:.09em; color:#acafb9; margin-bottom:22px; }
 .benefit h3 { font-size:24px; line-height:1.2; }

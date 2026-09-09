@@ -28,6 +28,10 @@ for (const file of fs.readdirSync(path.join(root, 'assets/css'))) {
   }
 }
 for (const file of fs.readdirSync(path.join(root, 'assets/js'))) {
-  new vm.Script(fs.readFileSync(path.join(root, 'assets/js', file), 'utf8'), { filename: file });
+  const script = fs.readFileSync(path.join(root, 'assets/js', file), 'utf8');
+  new vm.Script(script, { filename: file });
+  for (const [, target] of script.matchAll(/['"](assets\/[^'"\s]+)['"]/g)) {
+    if (!fs.existsSync(path.join(root, target))) throw Error(`Missing JavaScript asset in ${file}: ${target}`);
+  }
 }
 console.log('PASS: local assets, navigation anchors, interaction targets, unique IDs and JavaScript syntax');

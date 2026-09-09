@@ -282,17 +282,31 @@ const demiandMotion = (() => {
   });
 })();
 
-/* Catalog data: neutral demo swatches only. Replace labels, swatches and images here. */
+/* One reference photo per category until individual model/color photography is ready. */
 (() => {
-  const demoColors = ['#dedfe2', '#474a51', '#b7bbc3', '#8c929d'].map((swatch, i) => ({ label: `Placeholder color ${i + 1}`, swatch, image: null }));
-  const models = (counts, singular) => counts.map((count, i) => ({
-    name: `${singular} / MODEL ${String(i + 1).padStart(2, '0')}`,
-    colors: demoColors.slice(0, count).map(color => ({ ...color })), image: null
+  const colors = [
+    { label: 'Pearl', swatch: '#dedfe2' },
+    { label: 'Graphite', swatch: '#474a51' },
+    { label: 'Silver', swatch: '#b7bbc3' },
+    { label: 'Slate', swatch: '#8c929d' }
+  ];
+  const models = (items, singular) => items.map(([sku, colorCount]) => ({
+    name: `${singular} / ${sku}`,
+    colors: colors.slice(0, colorCount)
   }));
   const catalog = {
-    'air-fryers': { title: 'AIR FRYERS', models: models([3, 3, 3, 2, 2, 2, 2], 'AIR FRYER') },
-    'coffee-makers': { title: 'COFFEE MAKERS', models: models([3, 2, 1], 'COFFEE MAKER') },
-    blenders: { title: 'BLENDERS', models: models([2, 4], 'BLENDER') }
+    'air-fryers': {
+      title: 'AIR FRYERS', image: 'assets/images/catalog-airfryer-2700.png', photoAlt: 'DEMIAND DK-2700 air fryer',
+      models: models([['DK-2400', 3], ['DK-2200', 3], ['DK-5100', 3], ['DK-2500', 2], ['DK-2700', 2], ['DK-5000', 2], ['DK-5300', 2]], 'AIR FRYER')
+    },
+    'coffee-makers': {
+      title: 'COFFEE MAKERS', image: 'assets/images/catalog-coffee-3500.png', photoAlt: 'DEMIAND KF-3500 coffee maker',
+      models: models([['KF-3500', 3], ['KF-3100', 2], ['KF-3200', 1]], 'COFFEE MAKER')
+    },
+    blenders: {
+      title: 'BLENDERS', image: 'assets/images/catalog-blender-1200.png', photoAlt: 'DEMIAND BL-1200 blender',
+      models: models([['BL-1200', 2], ['DB-E1300', 4]], 'BLENDER')
+    }
   };
   const section = document.getElementById('portfolio');
   const categories = section.querySelector('.products');
@@ -315,23 +329,15 @@ const demiandMotion = (() => {
     if (reducedMotion.matches) return Promise.resolve();
     return element.animate(frames, { duration: demiandMotion.state, easing, ...options }).finished.catch(() => {});
   }
-  function showImage(frame, src, alt) {
-    frame.replaceChildren();
-    if (src) {
-      const image = new Image(); image.src = src; image.alt = alt; image.draggable = false;
-      frame.append(image);
-    } else {
-      const label = document.createElement('span'); label.className = 'placeholder-label'; label.textContent = 'PRODUCT IMAGE / PLACEHOLDER'; frame.append(label);
-    }
-  }
   function render(data) {
-    rail.style.setProperty('--model-columns', Math.min(3.5, data.models.length));
     rail.replaceChildren();
-    data.models.forEach((model, index) => {
+    data.models.forEach(model => {
       const card = document.createElement('article'); card.className = 'catalog-card';
-      card.setAttribute('aria-label', `${model.name}, ${model.colors.length} placeholder colors`);
-      const frame = document.createElement('div'); frame.className = 'catalog-image media-placeholder';
-      showImage(frame, model.image, model.name);
+      card.setAttribute('aria-label', model.name);
+      const frame = document.createElement('div'); frame.className = 'catalog-image';
+      const image = new Image(); image.src = data.image; image.alt = data.photoAlt;
+      image.width = 2500; image.height = 2000; image.draggable = false; image.decoding = 'async';
+      frame.append(image);
       const name = document.createElement('h3'); name.textContent = model.name;
       const swatches = document.createElement('div'); swatches.className = 'catalog-swatches'; swatches.setAttribute('role', 'group'); swatches.setAttribute('aria-label', `${model.name}: illustrative color options`);
       model.colors.forEach((color, i) => {
@@ -340,12 +346,10 @@ const demiandMotion = (() => {
         button.setAttribute('aria-pressed', String(i === 0));
         button.addEventListener('click', () => {
           swatches.querySelectorAll('button').forEach(node => node.setAttribute('aria-pressed', String(node === button)));
-          showImage(frame, color.image || model.image, `${model.name}: ${color.label}`);
-          animate(frame, [{ opacity: .4 }, { opacity: 1 }], { duration: demiandMotion.micro });
         });
         swatches.append(button);
       });
-      card.append(frame, name, swatches); card.style.setProperty('--card', index); rail.append(card);
+      card.append(frame, name, swatches); rail.append(card);
     });
   }
   function update() {
