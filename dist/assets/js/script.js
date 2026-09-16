@@ -106,6 +106,61 @@ const demiandMotion = (() => {
     let activeStoryIndex = 0;
     let storyAnimations = [];
     let storyGeneration = 0;
+    const storyAutoplayDelay = 6500;
+    let storyAutoplayTimer = null;
+    let storyAutoplayStarted = 0;
+    let storyAutoplayRemaining = storyAutoplayDelay;
+    let storyInView = false;
+    let storyPointerInside = false;
+    let storyFocusInside = false;
+    let storyDragging = false;
+
+    function storyCanAutoplay() {
+      return storyInView && document.visibilityState === 'visible' && !reducedMotion.matches &&
+        !storyPointerInside && !storyFocusInside && !storyDragging;
+    }
+
+    function clearStoryAutoplayTimer() {
+      if (storyAutoplayTimer === null) return;
+      clearTimeout(storyAutoplayTimer);
+      storyAutoplayTimer = null;
+    }
+
+    function pauseStoryAutoplay() {
+      if (storyAutoplayTimer !== null) {
+        storyAutoplayRemaining = Math.max(250,storyAutoplayRemaining - (performance.now() - storyAutoplayStarted));
+      }
+      clearStoryAutoplayTimer();
+      if (appStory.classList.contains('is-autoplay-running')) appStory.classList.add('is-autoplay-paused');
+    }
+
+    function resumeStoryAutoplay() {
+      if (!storyCanAutoplay() || storyAutoplayTimer !== null) return;
+      if (!appStory.classList.contains('is-autoplay-running')) {
+        storyAutoplayRemaining = storyAutoplayDelay;
+        appStory.classList.add('is-autoplay-running');
+      }
+      appStory.classList.remove('is-autoplay-paused');
+      storyAutoplayStarted = performance.now();
+      storyAutoplayTimer = setTimeout(() => {
+        storyAutoplayTimer = null;
+        selectStorySlide(activeStoryIndex + 1,1);
+      },storyAutoplayRemaining);
+    }
+
+    function resetStoryAutoplay() {
+      clearStoryAutoplayTimer();
+      storyAutoplayRemaining = storyAutoplayDelay;
+      appStory.classList.remove('is-autoplay-running','is-autoplay-paused');
+      if (!storyCanAutoplay()) return;
+      void appStory.offsetWidth;
+      appStory.classList.add('is-autoplay-running');
+      storyAutoplayStarted = performance.now();
+      storyAutoplayTimer = setTimeout(() => {
+        storyAutoplayTimer = null;
+        selectStorySlide(activeStoryIndex + 1,1);
+      },storyAutoplayDelay);
+    }
 
     function settleStory() {
       storyAnimations.forEach(animation => animation.cancel());
@@ -120,7 +175,7 @@ const demiandMotion = (() => {
     }
 
     function updateStoryInterface(index) {
-      storyCount.textContent = `${String(index + 1).padStart(2,'0')} — ${String(storySlides.length).padStart(2,'0')}`;
+      storyCount.textContent = `${String(index + 1).padStart(2,'0')} / ${String(storySlides.length).padStart(2,'0')}`;
       storyTitle.textContent = storyTitles[index];
       storyDots.forEach((dot, dotIndex) => {
         if (dotIndex === index) dot.setAttribute('aria-current', 'true');
@@ -135,7 +190,10 @@ const demiandMotion = (() => {
 
     function selectStorySlide(requestedIndex, requestedDirection) {
       const nextIndex = (requestedIndex + storySlides.length) % storySlides.length;
-      if (nextIndex === activeStoryIndex) return;
+      if (nextIndex === activeStoryIndex) {
+        resetStoryAutoplay();
+        return;
+      }
       settleStory();
       const previousIndex = activeStoryIndex;
       const outgoing = storySlides[previousIndex];
@@ -147,6 +205,7 @@ const demiandMotion = (() => {
       incoming.inert = false;
       incoming.setAttribute('aria-hidden', 'false');
       updateStoryInterface(nextIndex);
+      resetStoryAutoplay();
 
       if (reducedMotion.matches) {
         settleStory();
@@ -165,10 +224,23 @@ const demiandMotion = (() => {
         incomingCopy.animate([{opacity:0,transform:`translateX(${18 * direction}px)`},{opacity:1,transform:'translateX(0)'}], {...options, delay:70}),
         incomingVisual.animate([{opacity:0,transform:`translate3d(${36 * direction}px,12px,0) scale(.985)`},{opacity:1,transform:'translate3d(0,0,0) scale(1)'}], {...options, delay:40})
       ];
+      const incomingKicker = incoming.querySelector('.app-slide-kicker');
+      if (incomingKicker) {
+        storyAnimations.push(incomingKicker.animate([
+          {opacity:0,clipPath:'inset(0 100% 0 0)',transform:'translateY(-6px)'},
+          {opacity:1,clipPath:'inset(0)',transform:'none'}
+        ], {...options, delay:60}));
+      }
+      incoming.querySelectorAll('.app-capability-grid li,.app-step-list li,.app-assistant-request').forEach((item, itemIndex) => {
+        storyAnimations.push(item.animate([
+          {opacity:0,transform:`translate3d(${16 * direction}px,10px,0)`},
+          {opacity:1,filter:'blur(0)',transform:'translate3d(0,0,0)'}
+        ], {...options, delay:115 + Math.min(itemIndex,5) * demiandMotion.stagger}));
+      });
       incoming.querySelectorAll('.app-phone,.app-intelligence-level').forEach((item, itemIndex) => {
         storyAnimations.push(item.animate([
-          {opacity:0,transform:`translate3d(${28 * direction}px,12px,0)`},
-          {opacity:1,transform:'translate3d(0,0,0)'}
+          {opacity:0,filter:'blur(3px)',transform:`translate3d(${34 * direction}px,14px,0) scale(.975)`},
+          {opacity:1,filter:'blur(0)',transform:'translate3d(0,0,0)'}
         ], {...options, delay:90 + Math.min(itemIndex,4) * demiandMotion.stagger}));
       });
       const running = [...storyAnimations];
@@ -197,16 +269,26 @@ const demiandMotion = (() => {
     storyShell.addEventListener('pointerdown', event => {
       if (event.button !== 0 || event.target.closest('button,a')) return;
       dragStart = { x:event.clientX, y:event.clientY, id:event.pointerId };
+      storyDragging = true;
+      pauseStoryAutoplay();
     });
     storyShell.addEventListener('pointerup', event => {
       if (!dragStart || dragStart.id !== event.pointerId) return;
       const distanceX = event.clientX - dragStart.x;
       const distanceY = event.clientY - dragStart.y;
       dragStart = null;
-      if (Math.abs(distanceX) < 48 || Math.abs(distanceX) < Math.abs(distanceY) * 1.35) return;
+      storyDragging = false;
+      if (Math.abs(distanceX) < 48 || Math.abs(distanceX) < Math.abs(distanceY) * 1.35) {
+        resumeStoryAutoplay();
+        return;
+      }
       selectStorySlide(activeStoryIndex + (distanceX < 0 ? 1 : -1), distanceX < 0 ? 1 : -1);
     });
-    storyShell.addEventListener('pointercancel', () => { dragStart = null; });
+    storyShell.addEventListener('pointercancel', () => {
+      dragStart = null;
+      storyDragging = false;
+      resumeStoryAutoplay();
+    });
 
     let horizontalWheel = 0;
     let wheelReset;
@@ -222,9 +304,44 @@ const demiandMotion = (() => {
       selectStorySlide(activeStoryIndex + direction, direction);
     }, { passive:false });
 
+    const storyVisibilityObserver = new IntersectionObserver(entries => {
+      storyInView = entries[0]?.isIntersecting && entries[0].intersectionRatio >= .45;
+      if (storyInView) resumeStoryAutoplay();
+      else pauseStoryAutoplay();
+    }, { threshold:[0,.45,.75] });
+    storyVisibilityObserver.observe(appStory);
+
+    appStory.addEventListener('pointerenter', () => {
+      storyPointerInside = true;
+      pauseStoryAutoplay();
+    });
+    appStory.addEventListener('pointerleave', () => {
+      storyPointerInside = false;
+      if (!storyDragging) resumeStoryAutoplay();
+    });
+    appStory.addEventListener('focusin', () => {
+      storyFocusInside = true;
+      pauseStoryAutoplay();
+    });
+    appStory.addEventListener('focusout', () => {
+      requestAnimationFrame(() => {
+        storyFocusInside = appStory.contains(document.activeElement);
+        if (!storyFocusInside) resumeStoryAutoplay();
+      });
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') resumeStoryAutoplay();
+      else pauseStoryAutoplay();
+    });
     reducedMotion.addEventListener('change', () => {
       storyGeneration++;
       settleStory();
+      if (reducedMotion.matches) {
+        clearStoryAutoplayTimer();
+        appStory.classList.remove('is-autoplay-running','is-autoplay-paused');
+      } else {
+        resetStoryAutoplay();
+      }
     });
     updateStoryInterface(0);
     settleStory();
