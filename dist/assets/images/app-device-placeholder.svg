@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="740" viewBox="0 0 360 740" fill="none">
+  <rect x="2" y="2" width="356" height="736" rx="58" fill="#17191e" stroke="#3c3f47" stroke-width="4"/>
+  <rect x="16" y="16" width="328" height="708" rx="46" fill="#23262d" stroke="#ffffff" stroke-opacity=".12"/>
+  <path d="M142 34h76" stroke="#81858f" stroke-width="8" stroke-linecap="round"/>
+  <path d="M58 204h244M58 536h244" stroke="#ffffff" stroke-opacity=".08"/>
+  <path d="M180 146v448M74 370h212" stroke="#ffffff" stroke-opacity=".055"/>
+  <circle cx="180" cy="370" r="54" stroke="#ef001b" stroke-opacity=".48"/>
+  <circle cx="180" cy="370" r="6" fill="#ef001b"/>
+  <text x="180" y="454" fill="#d9dbe0" font-family="Arial, sans-serif" font-size="17" font-weight="700" letter-spacing="2.4" text-anchor="middle">DEVICE ASSET</text>
+  <text x="180" y="481" fill="#8f939d" font-family="Arial, sans-serif" font-size="11" letter-spacing="1.6" text-anchor="middle">TRANSPARENT PNG / WEBP</text>
+</svg>

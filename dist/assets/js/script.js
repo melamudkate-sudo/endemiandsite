@@ -86,6 +86,150 @@ const demiandMotion = (() => {
     });
   });
 
+  const appStory = document.getElementById('smartcook');
+  if (appStory) {
+    const storyShell = appStory.querySelector('.app-story-shell');
+    const storySlides = [...appStory.querySelectorAll('[data-app-slide]')];
+    const storyDots = [...appStory.querySelectorAll('.app-story-pagination button')];
+    const storyCount = appStory.querySelector('.app-story-count');
+    const storyTitle = appStory.querySelector('.app-story-title');
+    const storyTitles = [
+      'Digital cooking ecosystem', 'Connected appliance control', 'Three levels of intelligence',
+      'Expanded programs', 'Smart programs', 'AI Mode', 'Growing content library',
+      'Recipe experience', 'AI Culinary Assistant'
+    ];
+    const storyScenes = [
+      ['0px','0px','0px'], ['-24px','16px','18px'], ['18px','-12px','-12px'],
+      ['-10px','24px','26px'], ['28px','4px','-20px'], ['-18px','-20px','12px'],
+      ['20px','18px','30px'], ['-30px','-8px','-18px'], ['8px','-24px','20px']
+    ];
+    let activeStoryIndex = 0;
+    let storyAnimations = [];
+    let storyGeneration = 0;
+
+    function settleStory() {
+      storyAnimations.forEach(animation => animation.cancel());
+      storyAnimations = [];
+      storySlides.forEach((slide, index) => {
+        const active = index === activeStoryIndex;
+        slide.hidden = !active;
+        slide.inert = !active;
+        slide.classList.toggle('is-active', active);
+        slide.setAttribute('aria-hidden', String(!active));
+      });
+    }
+
+    function updateStoryInterface(index) {
+      storyCount.textContent = `${String(index + 1).padStart(2,'0')} — ${String(storySlides.length).padStart(2,'0')}`;
+      storyTitle.textContent = storyTitles[index];
+      storyDots.forEach((dot, dotIndex) => {
+        if (dotIndex === index) dot.setAttribute('aria-current', 'true');
+        else dot.removeAttribute('aria-current');
+      });
+      const [orbitX, orbitY, gridX] = storyScenes[index];
+      appStory.style.setProperty('--orbit-x', orbitX);
+      appStory.style.setProperty('--orbit-y', orbitY);
+      appStory.style.setProperty('--grid-x', gridX);
+      appStory.dataset.activeSlide = index;
+    }
+
+    function selectStorySlide(requestedIndex, requestedDirection) {
+      const nextIndex = (requestedIndex + storySlides.length) % storySlides.length;
+      if (nextIndex === activeStoryIndex) return;
+      settleStory();
+      const previousIndex = activeStoryIndex;
+      const outgoing = storySlides[previousIndex];
+      const incoming = storySlides[nextIndex];
+      const direction = requestedDirection || (nextIndex > previousIndex ? 1 : -1);
+      const generation = ++storyGeneration;
+      activeStoryIndex = nextIndex;
+      incoming.hidden = false;
+      incoming.inert = false;
+      incoming.setAttribute('aria-hidden', 'false');
+      updateStoryInterface(nextIndex);
+
+      if (reducedMotion.matches) {
+        settleStory();
+        return;
+      }
+
+      const outgoingCopy = outgoing.querySelector('.app-slide-copy');
+      const outgoingVisual = outgoing.querySelector('.app-slide-visual');
+      const incomingCopy = incoming.querySelector('.app-slide-copy');
+      const incomingVisual = incoming.querySelector('.app-slide-visual');
+      const duration = demiandMotion.state;
+      const options = { duration, easing: demiandMotion.ease, fill: 'both' };
+      storyAnimations = [
+        outgoingCopy.animate([{opacity:1,transform:'translateX(0)'},{opacity:0,transform:`translateX(${-16 * direction}px)`}], options),
+        outgoingVisual.animate([{opacity:1,transform:'translate3d(0,0,0)'},{opacity:0,transform:`translate3d(${-30 * direction}px,8px,0) scale(.99)`}], options),
+        incomingCopy.animate([{opacity:0,transform:`translateX(${18 * direction}px)`},{opacity:1,transform:'translateX(0)'}], {...options, delay:70}),
+        incomingVisual.animate([{opacity:0,transform:`translate3d(${36 * direction}px,12px,0) scale(.985)`},{opacity:1,transform:'translate3d(0,0,0) scale(1)'}], {...options, delay:40})
+      ];
+      incoming.querySelectorAll('.app-phone,.app-intelligence-level').forEach((item, itemIndex) => {
+        storyAnimations.push(item.animate([
+          {opacity:0,transform:`translate3d(${28 * direction}px,12px,0)`},
+          {opacity:1,transform:'translate3d(0,0,0)'}
+        ], {...options, delay:90 + Math.min(itemIndex,4) * demiandMotion.stagger}));
+      });
+      const running = [...storyAnimations];
+      Promise.all(running.map(animation => animation.finished)).then(() => {
+        if (generation !== storyGeneration) return;
+        outgoing.hidden = true;
+        outgoing.inert = true;
+        outgoing.setAttribute('aria-hidden', 'true');
+        incoming.classList.add('is-active');
+        running.forEach(animation => animation.cancel());
+        storyAnimations = [];
+      }).catch(() => {});
+    }
+
+    appStory.querySelector('.app-story-prev').addEventListener('click', () => selectStorySlide(activeStoryIndex - 1, -1));
+    appStory.querySelector('.app-story-next').addEventListener('click', () => selectStorySlide(activeStoryIndex + 1, 1));
+    storyDots.forEach((dot, index) => dot.addEventListener('click', () => selectStorySlide(index, index > activeStoryIndex ? 1 : -1)));
+    storyShell.addEventListener('keydown', event => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      if (event.target.matches('input,select,textarea')) return;
+      event.preventDefault();
+      selectStorySlide(activeStoryIndex + (event.key === 'ArrowRight' ? 1 : -1), event.key === 'ArrowRight' ? 1 : -1);
+    });
+
+    let dragStart = null;
+    storyShell.addEventListener('pointerdown', event => {
+      if (event.button !== 0 || event.target.closest('button,a')) return;
+      dragStart = { x:event.clientX, y:event.clientY, id:event.pointerId };
+    });
+    storyShell.addEventListener('pointerup', event => {
+      if (!dragStart || dragStart.id !== event.pointerId) return;
+      const distanceX = event.clientX - dragStart.x;
+      const distanceY = event.clientY - dragStart.y;
+      dragStart = null;
+      if (Math.abs(distanceX) < 48 || Math.abs(distanceX) < Math.abs(distanceY) * 1.35) return;
+      selectStorySlide(activeStoryIndex + (distanceX < 0 ? 1 : -1), distanceX < 0 ? 1 : -1);
+    });
+    storyShell.addEventListener('pointercancel', () => { dragStart = null; });
+
+    let horizontalWheel = 0;
+    let wheelReset;
+    storyShell.addEventListener('wheel', event => {
+      if (Math.abs(event.deltaX) < Math.abs(event.deltaY) * 1.25 || Math.abs(event.deltaX) < 2) return;
+      event.preventDefault();
+      horizontalWheel += event.deltaX;
+      clearTimeout(wheelReset);
+      wheelReset = setTimeout(() => { horizontalWheel = 0; }, 180);
+      if (Math.abs(horizontalWheel) < 42) return;
+      const direction = horizontalWheel > 0 ? 1 : -1;
+      horizontalWheel = 0;
+      selectStorySlide(activeStoryIndex + direction, direction);
+    }, { passive:false });
+
+    reducedMotion.addEventListener('change', () => {
+      storyGeneration++;
+      settleStory();
+    });
+    updateStoryInterface(0);
+    settleStory();
+  }
+
   const partnerTerms = [...document.querySelectorAll('.terms-accordion details')];
   let selectedTerm = partnerTerms.find(detail => detail.open);
   const closingTerms = new Map();
@@ -202,7 +346,7 @@ const demiandMotion = (() => {
     });
   }, { threshold: .06, rootMargin: '0px 0px -3% 0px' });
   document.querySelectorAll('.reveal').forEach(node => revealObserver.observe(node));
-  document.querySelectorAll('.products,.benefit-grid,.connected-features,.manufacturing-metrics').forEach(group => {
+  document.querySelectorAll('.products,.benefit-grid,.manufacturing-metrics').forEach(group => {
     [...group.children].forEach((node, index) => {
       node.style.transitionDelay = Math.min(index * demiandMotion.stagger, demiandMotion.stagger * 3) + 'ms';
     });
