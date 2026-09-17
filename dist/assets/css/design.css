@@ -15,8 +15,10 @@
   --radius-glass:32px;
   --radius-chapter:32px;
   --motion-micro:220ms;
-  --motion-state:550ms;
-  --motion-chapter:850ms;
+  --motion-state:380ms;
+  --motion-slide:620ms;
+  --motion-visual:900ms;
+  --motion-chapter:740ms;
   --motion-stagger:60ms;
   --navbar-height:72px;
   --label-size:12px;
@@ -795,3 +797,38 @@ html { scroll-behavior:auto; }
 }
 
 @media(max-width:1000px) { :root { --navbar-height:68px; } }
+
+/* Shared chapter grammar: precision line, ascending content, then the visual. */
+.viewport-section[data-transition="story"] { position:relative; isolation:isolate; margin-top:0; border-radius:0; scroll-margin-top:var(--navbar-height); }
+.viewport-section[data-transition="story"]::before { content:''; position:absolute; z-index:1; top:0; left:var(--x); right:var(--x); height:1px; background:#c7ccd4; pointer-events:none; }
+.viewport-section[data-transition="story"]::after { content:''; position:absolute; z-index:2; left:var(--x); top:0; width:44px; height:2px; background:var(--red); transform:scaleX(0); transform-origin:left; pointer-events:none; transition:transform var(--motion-visual) var(--ease) 500ms; }
+.viewport-section[data-transition="story"].story-entered::after { transform:scaleX(1); }
+#technology[data-transition="story"] { padding-top:32px; padding-bottom:40px; }
+#manufacturing[data-transition="story"] { padding-top:32px; }
+#manufacturing .manufacturing-metrics strong { font-size:clamp(38px,4.2vw,70px); }
+#manufacturing .production-film { box-shadow:0 24px 50px -35px #101b3b40; }
+#manufacturing .production-photo { display:block; width:100%; height:clamp(300px,40dvh,460px); object-fit:cover; object-position:center 48%; }
+#manufacturing .production-film::after { content:''; position:absolute; inset:0; pointer-events:none; background:linear-gradient(#080d1759,transparent 35%,#080d174d); }
+#manufacturing .production-film figcaption { z-index:1; }
+@media(prefers-reduced-motion:no-preference) {
+ [data-transition="story"] .reveal { transition:opacity var(--motion-chapter) var(--ease),transform var(--motion-chapter) var(--ease),clip-path var(--motion-chapter) var(--ease); transform:translateY(22px); clip-path:inset(0 0 14% 0); }
+ [data-transition="story"] .reveal.visible { opacity:1; transform:none; clip-path:inset(0); }
+ [data-transition="story"] .section-label { transition-delay:0ms; }
+ [data-transition="story"] h2.reveal { transition-delay:80ms; }
+ [data-transition="story"] p.reveal { transition-delay:150ms; }
+ [data-transition="story"] .commercial-media.reveal,[data-transition="story"] .production-film.reveal { clip-path:inset(0 0 100% 0 round 8px); transform:translateY(14px) scale(.985); transition-duration:var(--motion-visual); transition-delay:200ms; }
+ [data-transition="story"] .commercial-media.reveal.visible,[data-transition="story"] .production-film.reveal.visible { clip-path:inset(0 round 8px); transform:none; }
+ [data-transition="story"] .app-story-shell.reveal { clip-path:none; transition-delay:160ms; }
+ .app-story-shell .app-story-frame { clip-path:inset(0 0 100% 0 round 12px); transition:clip-path var(--motion-visual) var(--ease) 200ms; }
+ .app-story-shell.visible .app-story-frame { clip-path:inset(0 round 12px); }
+ .commercial-benefits li:nth-child(1) { transition-delay:220ms; } .commercial-benefits li:nth-child(2) { transition-delay:280ms; } .commercial-benefits li:nth-child(3) { transition-delay:340ms; } .commercial-benefits li:nth-child(4) { transition-delay:400ms; }
+ .commercial-route .commercial-flow::before { transform:scaleX(0); transition:transform var(--motion-visual) var(--ease); }
+ .commercial-route.is-revealed .commercial-flow::before { transform:scaleX(1); }
+ .commercial-flow-node { opacity:0; transform:translateY(12px); transition:opacity var(--motion-chapter),transform var(--motion-chapter) var(--ease); transition-delay:calc(140ms + var(--flow-step) * var(--motion-stagger)); }
+ .commercial-route.is-revealed .commercial-flow-node { opacity:1; transform:none; }
+}
+@keyframes product-arrive { from { opacity:0; translate:30px 18px; scale:.96; } to { opacity:1; translate:0 0; scale:1; } }
+@media(max-width:600px) and (prefers-reduced-motion:no-preference) {
+ .commercial-route .commercial-flow::before { transform:scaleY(0); }
+ .commercial-route.is-revealed .commercial-flow::before { transform:scaleY(1); }
+}

@@ -2,7 +2,7 @@
 const demiandMotion = (() => {
   const styles = getComputedStyle(document.documentElement);
   const read = name => parseFloat(styles.getPropertyValue('--motion-' + name));
-  return Object.freeze({ micro:read('micro'), state:read('state'), chapter:read('chapter'), stagger:read('stagger'), ease:styles.getPropertyValue('--ease').trim() });
+  return Object.freeze({ micro:read('micro'), state:read('state'), chapter:read('chapter'), slide:read('slide'), visual:read('visual'), stagger:read('stagger'), ease:styles.getPropertyValue('--ease').trim() });
 })();
 /* DEMIAND / navigation, motion and contact interactions. */
 (() => {
@@ -175,6 +175,7 @@ const demiandMotion = (() => {
     }
 
     function updateStoryInterface(index) {
+      if (!reducedMotion.matches) storyCount.animate([{transform:'translateY(8px)',opacity:0},{transform:'translateY(0)',opacity:1}],{duration:demiandMotion.state,easing:demiandMotion.ease});
       storyCount.textContent = `${String(index + 1).padStart(2,'0')} / ${String(storySlides.length).padStart(2,'0')}`;
       storyTitle.textContent = storyTitles[index];
       storyDots.forEach((dot, dotIndex) => {
@@ -201,10 +202,13 @@ const demiandMotion = (() => {
       const direction = requestedDirection || (nextIndex > previousIndex ? 1 : -1);
       const generation = ++storyGeneration;
       activeStoryIndex = nextIndex;
+      outgoing.inert = true;
+      outgoing.setAttribute('aria-hidden','true');
       incoming.hidden = false;
       incoming.inert = false;
       incoming.setAttribute('aria-hidden', 'false');
       updateStoryInterface(nextIndex);
+      appStory.querySelector('.app-story-frame').dataset.direction = direction;
       resetStoryAutoplay();
 
       if (reducedMotion.matches) {
@@ -212,36 +216,33 @@ const demiandMotion = (() => {
         return;
       }
 
-      const outgoingCopy = outgoing.querySelector('.app-slide-copy');
-      const outgoingVisual = outgoing.querySelector('.app-slide-visual');
-      const incomingCopy = incoming.querySelector('.app-slide-copy');
-      const incomingVisual = incoming.querySelector('.app-slide-visual');
-      const duration = demiandMotion.state;
-      const options = { duration, easing: demiandMotion.ease, fill: 'both' };
+      const options = { duration:demiandMotion.slide, easing:demiandMotion.ease, fill:'both' };
+      const outCopy = outgoing.querySelector('.app-slide-copy');
+      const inCopy = incoming.querySelector('.app-slide-copy');
       storyAnimations = [
-        outgoingCopy.animate([{opacity:1,transform:'translateX(0)'},{opacity:0,transform:`translateX(${-16 * direction}px)`}], options),
-        outgoingVisual.animate([{opacity:1,transform:'translate3d(0,0,0)'},{opacity:0,transform:`translate3d(${-30 * direction}px,8px,0) scale(.99)`}], options),
-        incomingCopy.animate([{opacity:0,transform:`translateX(${18 * direction}px)`},{opacity:1,transform:'translateX(0)'}], {...options, delay:70}),
-        incomingVisual.animate([{opacity:0,transform:`translate3d(${36 * direction}px,12px,0) scale(.985)`},{opacity:1,transform:'translate3d(0,0,0) scale(1)'}], {...options, delay:40})
+        outCopy.animate([{opacity:1,translate:'0 0'},{opacity:0,translate:`${-22*direction}px -8px`}],{...options,duration:340}),
+        inCopy.animate([{opacity:0,translate:`${24*direction}px 12px`,clipPath:'inset(0 0 8% 0)'},{opacity:1,translate:'0 0',clipPath:'inset(0)'}],{...options,delay:80,duration:480})
       ];
-      const incomingKicker = incoming.querySelector('.app-slide-kicker');
-      if (incomingKicker) {
-        storyAnimations.push(incomingKicker.animate([
-          {opacity:0,clipPath:'inset(0 100% 0 0)',transform:'translateY(-6px)'},
-          {opacity:1,clipPath:'inset(0)',transform:'none'}
-        ], {...options, delay:60}));
-      }
-      incoming.querySelectorAll('.app-capability-grid li,.app-step-list li,.app-assistant-request').forEach((item, itemIndex) => {
-        storyAnimations.push(item.animate([
-          {opacity:0,transform:`translate3d(${16 * direction}px,10px,0)`},
-          {opacity:1,filter:'blur(0)',transform:'translate3d(0,0,0)'}
-        ], {...options, delay:115 + Math.min(itemIndex,5) * demiandMotion.stagger}));
+      outgoing.querySelectorAll('.app-device,.app-overview-group,.app-intelligence-level').forEach((item,i) => {
+        storyAnimations.push(item.animate([{opacity:1,translate:'0 0',scale:1},{opacity:0,translate:`${-38*direction}px -12px`,scale:.96}],{...options,duration:320,delay:Math.min(i,3)*35}));
       });
-      incoming.querySelectorAll('.app-phone,.app-intelligence-level').forEach((item, itemIndex) => {
+      incoming.querySelectorAll('.app-device,.app-overview-group,.app-intelligence-level').forEach((item,i) => {
         storyAnimations.push(item.animate([
-          {opacity:0,filter:'blur(3px)',transform:`translate3d(${34 * direction}px,14px,0) scale(.975)`},
-          {opacity:1,filter:'blur(0)',transform:'translate3d(0,0,0)'}
-        ], {...options, delay:90 + Math.min(itemIndex,4) * demiandMotion.stagger}));
+          {opacity:0,translate:`${48*direction}px 20px`,scale:.94,rotate:`y ${-8*direction}deg`},
+          {opacity:1,translate:'0 0',scale:1,rotate:'y 0deg'}
+        ],{...options,duration:480,delay:80+Math.min(i,3)*55}));
+      });
+      incoming.querySelectorAll('.app-capability-grid li,.app-step-list li,.app-assistant-request').forEach((item,i) => {
+        storyAnimations.push(item.animate([{opacity:0,translate:'0 10px'},{opacity:1,translate:'0 0'}],{...options,duration:380,delay:140+Math.min(i,4)*50}));
+      });
+      [outgoing,incoming].forEach((slide,i) => {
+        storyAnimations.push(slide.querySelector('.app-slide-visual').animate(i ? [{opacity:0},{opacity:1}] : [{opacity:1},{opacity:0}],{...options,duration:i?500:340}));
+        slide.querySelectorAll('.app-scene-emblem,.app-scene-circuit,.app-signal-path,.app-generated-path,.app-progress-line,.app-journey-line').forEach((detail,n)=>{
+          storyAnimations.push(detail.animate(i ? [
+            {opacity:0,translate:`${28*direction}px 0`,clipPath:'inset(0 100% 0 0)'},
+            {opacity:1,translate:'0 0',clipPath:'inset(0)'}
+          ] : [{opacity:1,translate:'0 0'},{opacity:0,translate:`${-16*direction}px 0`}],{...options,duration:i?440:280,delay:i?140+n*45:0}));
+        });
       });
       const running = [...storyAnimations];
       Promise.all(running.map(animation => animation.finished)).then(() => {
@@ -311,6 +312,22 @@ const demiandMotion = (() => {
     }, { threshold:[0,.45,.75] });
     storyVisibilityObserver.observe(appStory);
 
+    // Pointer-driven depth is scheduled only on input; no continuous render loop.
+    let scenePointerFrame = 0;
+    storyShell.addEventListener('pointermove', event => {
+      if(reducedMotion.matches || !finePointer.matches || storyDragging || innerWidth<=900 || scenePointerFrame) return;
+      scenePointerFrame=requestAnimationFrame(()=>{
+        scenePointerFrame=0;
+        const r=storyShell.getBoundingClientRect();
+        appStory.style.setProperty('--scene-pointer-x',`${((event.clientX-r.left)/r.width-.5)*10}px`);
+        appStory.style.setProperty('--scene-pointer-y',`${((event.clientY-r.top)/r.height-.5)*6}px`);
+      });
+    },{passive:true});
+    storyShell.addEventListener('pointerleave',()=>{
+      appStory.style.setProperty('--scene-pointer-x','0px');
+      appStory.style.setProperty('--scene-pointer-y','0px');
+    });
+
     appStory.addEventListener('pointerenter', () => {
       storyPointerInside = true;
       pauseStoryAutoplay();
@@ -371,6 +388,61 @@ const demiandMotion = (() => {
     });
   }));
 
+  // Ordered story reveals, independent of native document scrolling.
+  const storyObserver = new IntersectionObserver(entries => {
+    entries.forEach(({target,isIntersecting}) => {
+      if(!isIntersecting) return;
+      target.classList.add('story-entered'); storyObserver.unobserve(target);
+      if(target.id==='smartcook' && !reducedMotion.matches) {
+        const ordered=[
+          [target.querySelector('.app-slide:not([hidden]) h2'),320],
+          [target.querySelector('.app-slide:not([hidden]) .app-slide-lead'),400],
+          [target.querySelector('.app-slide:not([hidden]) .app-slide-visual'),500],
+          [target.querySelector('.app-slide:not([hidden]) .app-scene-emblem'),600],
+          [target.querySelector('.app-slide:not([hidden]) .app-scene-circuit'),620],
+          [target.querySelector('.app-story-progress'),660],
+          [target.querySelector('.app-story-nav-cluster'),660]
+        ];
+        ordered.forEach(([node,delay])=>node?.animate([
+          {opacity:0,translate:'0 18px',clipPath:'inset(0 0 12% 0)'},
+          {opacity:1,translate:'0 0',clipPath:'inset(-80px)'}
+        ],{duration:demiandMotion.chapter,delay,easing:demiandMotion.ease,fill:'backwards'}));
+      }
+    });
+  },{threshold:.12});
+  document.querySelectorAll('[data-transition="story"]').forEach(section => storyObserver.observe(section));
+  const route = document.querySelector('.commercial-route');
+  if(route) new IntersectionObserver((entries,observer) => {
+    if(entries[0].isIntersecting){ route.classList.add('is-revealed'); observer.disconnect(); }
+  },{threshold:.5}).observe(route);
+  const sectionLinks=[...moreMenu.querySelectorAll('a')], visibleSections=new Map();
+  const mapObserver=new IntersectionObserver(entries => {
+    entries.forEach(entry => visibleSections.set(entry.target,entry));
+    const current=[...visibleSections.values()].filter(entry=>entry.isIntersecting)
+      .sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0]?.target;
+    if(!current) return;
+    sectionLinks.forEach(link=>{
+      if(link.hash==='#'+current.id) link.setAttribute('aria-current','location');
+      else link.removeAttribute('aria-current');
+    });
+  },{rootMargin:'-72px 0px -25% 0px',threshold:[0,.2,.5,.8]});
+  document.querySelectorAll('[data-section]').forEach(section=>mapObserver.observe(section));
+  moreToggle.addEventListener('keydown',event=>{
+    if(event.key==='ArrowDown'){event.preventDefault();setMoreOpen(true);requestAnimationFrame(()=>sectionLinks[0].focus({preventScroll:true}));}
+  });
+  moreMenu.addEventListener('keydown',event=>{
+    const links=[moreMenu.querySelector('button'),...sectionLinks], index=links.indexOf(document.activeElement);
+    if(event.key==='Tab'){
+      if(event.shiftKey && index===0){event.preventDefault();links.at(-1).focus();}
+      else if(!event.shiftKey && index===links.length-1){event.preventDefault();links[0].focus();}
+    }
+    if(['ArrowDown','ArrowUp','Home','End'].includes(event.key)){
+      event.preventDefault();
+      const next=event.key==='Home'?1:event.key==='End'?links.length-1:(index+(event.key==='ArrowDown'?1:-1)+links.length)%links.length;
+      links[next].focus();
+    }
+  });
+
   // Scroll-triggered surfaces: exactly two mechanics, with no layout animation.
   const sections = [...document.querySelectorAll('.viewport-section')];
   const sectionBackgrounds = sections.map(section => {
@@ -378,7 +450,7 @@ const demiandMotion = (() => {
     return style.backgroundImage === 'none' && style.backgroundColor === 'rgba(0, 0, 0, 0)'
       ? getComputedStyle(document.body).background : style.background;
   });
-  const chapterStates = new Map(sections.filter(section => section.dataset.transition).map(section => [section, 'pending']));
+  const chapterStates = new Map(sections.filter(section => section.dataset.transition && section.dataset.transition !== 'story').map(section => [section, 'pending']));
   const activeChapters = new Map();
   const contentAllowed = node => {
     const state = chapterStates.get(node.closest('.viewport-section'));
