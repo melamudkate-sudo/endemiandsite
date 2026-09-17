@@ -34,7 +34,10 @@
     stopAdvance();
     if (!canAdvance()) return;
     advanceTimer = setTimeout(() => {
-      const nextIndex = (nearestItemIndex() + 1) % items.length;
+      const lastStartIndex = items.reduce((last,index) =>
+        items[index].offsetLeft <= rail.scrollWidth - rail.clientWidth + 2 ? index : last, 0);
+      const currentIndex = nearestItemIndex();
+      const nextIndex = currentIndex >= lastStartIndex ? 0 : currentIndex + 1;
       rail.scrollTo({ left:items[nextIndex].offsetLeft, behavior:'smooth' });
       scheduleAdvance();
     },advanceDelay);

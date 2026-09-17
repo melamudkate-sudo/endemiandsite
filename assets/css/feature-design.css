@@ -494,8 +494,21 @@
   font-weight: 600;
   letter-spacing: .16em;
 }
-.app-visual-overview .app-device-a { left: 30%; top: 2%; z-index: 2; transform: rotate(-2deg); }
-.app-visual-overview .app-device-b { left: 52%; top: 10%; z-index: 1; height: clamp(230px,45dvh,470px); transform: rotate(3deg); }
+.app-overview-group {
+  position:absolute;
+  inset:0;
+  z-index:2;
+  display:grid;
+  place-items:center;
+  margin:0;
+}
+.app-overview-group img {
+  display:block;
+  width:min(112%,760px);
+  height:112%;
+  object-fit:contain;
+  filter:drop-shadow(0 26px 28px #17191e28);
+}
 .app-visual-overview .app-visual-caption { right: 1%; top: 18%; writing-mode: vertical-rl; }
 .app-visual-connected .app-device-a { left: 5%; top: 18%; height: clamp(220px,42dvh,430px); transform: rotate(-4deg); }
 .app-visual-connected .app-device-b { left: 36%; top: 2%; z-index: 2; }

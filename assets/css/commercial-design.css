@@ -240,9 +240,11 @@
   background: #e7e8eb;
 }
 .commercial-image {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: inherit;
 }
 .commercial-image-placeholder {
   width: 100%;
@@ -559,11 +561,14 @@
   line-height: 1.52;
 }
 .manufacturing-proof-rail {
+  --manufacturing-rail-gap: clamp(10px,1.35vw,22px);
   min-width: 0;
   min-height: 0;
   display: grid;
-  grid-template-columns: repeat(4,minmax(0,1fr));
-  gap: clamp(10px,1.35vw,22px);
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - var(--manufacturing-rail-gap) - var(--manufacturing-rail-gap)) / 3);
+  gap: var(--manufacturing-rail-gap);
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
@@ -673,7 +678,6 @@
   }
   .manufacturing-proof-head { grid-template-columns:1fr; gap:12px; }
   .manufacturing-proof-rail {
-    grid-template-columns: none;
     grid-auto-flow: column;
     grid-auto-columns: minmax(250px,72vw);
     height: clamp(340px,56vw,520px);
